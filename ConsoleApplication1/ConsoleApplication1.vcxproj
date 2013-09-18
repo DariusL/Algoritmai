@@ -81,6 +81,7 @@
     <ClInclude Include="ArrayAccessor.h" />
     <ClInclude Include="Data.h" />
     <ClInclude Include="DataArray.h" />
+    <ClInclude Include="DataList.h" />
     <ClInclude Include="Iterator.h" />
   </ItemGroup>
   <ItemGroup>
