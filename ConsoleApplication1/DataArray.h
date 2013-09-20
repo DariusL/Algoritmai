@@ -23,5 +23,7 @@ ArrayAcessor<S> DataArray<S>::operator[](UINT pos)
 template <class S>
 DataArray<S>::DataArray(string file) : Data(file)
 {
+	if(IsEmpty())
+		WriteHeader(0);
 	count = ReadHeader();
 }

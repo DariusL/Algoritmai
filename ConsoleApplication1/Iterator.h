@@ -90,5 +90,5 @@ bool Iterator<S>::HasNext()
 template <class S>
 void Iterator<S>::Remove()
 {
-	
+	data->Remove(*this);
 }

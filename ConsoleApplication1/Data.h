@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning(disable:4244)
 #include <string>
 #include <fstream>
 
@@ -10,6 +11,7 @@ class Data
 {
 private:
 	fstream data;
+	string file;
 	int hSize;
 	int sSize;
 public:
@@ -20,6 +22,8 @@ protected:
 	void Write(S what, UINT pos);
 	H ReadHeader();
 	void WriteHeader(H header);
+	bool IsEmpty();
+	UINT SegmentCount();
 };
 
 template <class H, class S>
@@ -27,6 +31,7 @@ Data<H, S>::Data(string file) : data(file, ios::binary | ios::in | ios::out)
 {
 	hSize = sizeof(H);
 	sSize = sizeof(S);
+	this->file = file;
 }
 
 template <class H, class S>
@@ -36,11 +41,22 @@ Data<H, S>::~Data()
 }
 
 template <class H, class S>
+bool Data<H, S>::IsEmpty()
+{
+	data.seekg(0, ios_base::end);
+	int size = data.tellg();
+	return size <= 0;
+}
+
+template <class H, class S>
 S Data<H, S>::Read(UINT pos)
 {
 	S ret;
-	data.seekg(hSize + pos * sSize);
-	data.read((char*)&ret, sSize);
+	if(pos < SegmentCount())
+	{
+		data.seekg(hSize + pos * sSize);
+		data.read((char*)&ret, sSize);
+	}
 	return ret;
 }
 
@@ -63,6 +79,24 @@ H Data<H, S>::ReadHeader()
 template <class H, class S>
 void Data<H, S>::WriteHeader(H header)
 {
-	data.seekg(0);
-	data.write((char*)&header, hSize);
+	if(!data.is_open())
+	{
+		data.open(file, ios::binary | ios::out);
+		data.write((char*)&header, hSize);
+		data.close();
+		data.open(file, ios::binary | ios::in | ios::out);
+	}
+	else
+	{
+		data.seekg(0);
+		data.write((char*)&header, hSize);
+	}
+}
+
+template <class H, class S>
+UINT Data<H, S>::SegmentCount()
+{
+	data.seekg(0, ios::end);
+	UINT size = data.tellg();
+	return (size - hSize) / sSize;
 }
