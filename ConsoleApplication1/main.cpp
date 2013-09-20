@@ -4,6 +4,7 @@
 #include <iostream>
 #include <random>
 #include <functional>
+#include <ctime>
 int main()
 {
 	default_random_engine gen;
@@ -11,11 +12,16 @@ int main()
 	auto num = bind(dist, gen);
 	DataList<UINT> data("duomenys.bin");
 	auto it = data.Begin();
-	/*for(UINT i = 0; i < 1000000; i++)
-		data.InsertAfter(it, num());*/
+	UINT genTime = clock();
+	for(UINT i = 0; i < 1000; i++)
+		data.InsertAfter(it, num());
+	genTime = clock() - genTime;
+	UINT readTime = clock();
 	it = data.Begin();
 	while(it.Next())
-		cout << it.Get() << endl;
+		it.Get();
+	readTime = clock() - readTime;
+	cout << "gen - " << genTime / (double)CLOCKS_PER_SEC << endl << "read - " << readTime / (double)CLOCKS_PER_SEC << endl;
 	system("pause");
 	return 0;
 }

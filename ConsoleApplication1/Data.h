@@ -19,9 +19,9 @@ public:
 	virtual ~Data();
 protected:
 	S Read(UINT pos);
-	void Write(S what, UINT pos);
+	void Write(const S &what, UINT pos);
 	H ReadHeader();
-	void WriteHeader(H header);
+	void WriteHeader(const H &header);
 	bool IsEmpty();
 	UINT SegmentCount();
 };
@@ -61,7 +61,7 @@ S Data<H, S>::Read(UINT pos)
 }
 
 template <class H, class S>
-void Data<H, S>::Write(S what, UINT pos)
+void Data<H, S>::Write(const S &what, UINT pos)
 {
 	data.seekg(hSize + pos * sSize);
 	data.write((char*)&what, sSize);
@@ -77,7 +77,7 @@ H Data<H, S>::ReadHeader()
 }
 
 template <class H, class S>
-void Data<H, S>::WriteHeader(H header)
+void Data<H, S>::WriteHeader(const H &header)
 {
 	if(!data.is_open())
 	{

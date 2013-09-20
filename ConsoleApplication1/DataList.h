@@ -17,7 +17,7 @@ public:
 	Iterator<S> End();
 	void Remove(Iterator<S> &it);
 	bool Valid(const Iterator<S> &it);
-	void InsertAfter(const Iterator<S> &it, S data);
+	void InsertAfter(const Iterator<S> &it, const S &data);
 	void Swap(const Iterator<S> &left, const Iterator<S> right);
 private:
 	bool Valid(UINT pos);
@@ -112,7 +112,7 @@ UINT DataList<S>::New()
 }
 
 template <class S>
-void DataList<S>::InsertAfter(const Iterator<S> &it, S data)
+void DataList<S>::InsertAfter(const Iterator<S> &it, const S &data)
 {
 	ListEntry<S> entry, prev, next;
 	UINT entryInd, prevInd, nextInd;
