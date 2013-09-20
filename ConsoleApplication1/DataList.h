@@ -15,9 +15,10 @@ public:
 
 	Iterator<S> Begin();
 	Iterator<S> End();
-	void Remove(Iterator<S> it);
-	bool Valid(Iterator<S> it);
-	void InsertAfter(Iterator<S> it, S data);
+	void Remove(Iterator<S> &it);
+	bool Valid(const Iterator<S> &it);
+	void InsertAfter(const Iterator<S> &it, S data);
+	void Swap(const Iterator<S> &left, const Iterator<S> right);
 private:
 	bool Valid(UINT pos);
 	bool Empty(UINT pos);
@@ -60,10 +61,12 @@ Iterator<S> DataList<S>::End()
 }
 
 template <class S>
-void DataList<S>::Remove(Iterator<S> it)
+void DataList<S>::Remove(Iterator<S> &it)
 {
 	if(Valid(it))
 	{
+		if(it.entry < firstMaybeEmpty)
+			firstMaybeEmpty = it.entry;
 		ListHeader h = ReadHeader();
 		h.count--;
 		WriteHeader(h);
@@ -77,11 +80,12 @@ void DataList<S>::Remove(Iterator<S> it)
 		Write(e, it.entry);
 		Write(p, n.prev);
 		Write(n, p.next);
+		it.entry = p.next;
 	}
 }
 
 template <class S>
-bool DataList<S>::Valid(Iterator<S> it)
+bool DataList<S>::Valid(const Iterator<S> &it)
 {
 	return Valid(it.entry);
 }
@@ -108,7 +112,7 @@ UINT DataList<S>::New()
 }
 
 template <class S>
-void DataList<S>::InsertAfter(Iterator<S> it, S data)
+void DataList<S>::InsertAfter(const Iterator<S> &it, S data)
 {
 	ListEntry<S> entry, prev, next;
 	UINT entryInd, prevInd, nextInd;
@@ -129,4 +133,22 @@ void DataList<S>::InsertAfter(Iterator<S> it, S data)
 	Write(entry, entryInd);
 	Write(prev, prevInd);
 	Write(next, nextInd);
+}
+
+template <class S>
+void DataList<S>::Swap(const Iterator<S> &left, const Iterator<S> right)
+{
+	if(Valid(left) && Valid(right))
+	{
+		ListEntry<S> le = Read(left.entry);
+		ListEntry<S> re = Read(right.entry);
+
+		S temp;
+		temp = le.data;
+		le.data = re.data;
+		re.data = temp;
+
+		Write(le, left.entry);
+		Write(re, right.entry);
+	}
 }

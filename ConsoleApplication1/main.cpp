@@ -25,6 +25,17 @@ int main()
 	{
 		cout << it.Get() << endl;
 	}
+	auto left = data.Begin();
+	auto right = data.End();
+	left.Next();
+	right.Prev();
+	data.Swap(left, right);
+	cout << endl;
+	it = data.Begin();
+	while (it.Next())
+	{
+		cout << it.Get() << endl;
+	}
 	system("pause");
 	return 0;
 }
