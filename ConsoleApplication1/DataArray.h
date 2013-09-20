@@ -9,6 +9,7 @@ class DataArray : public Data<UINT, S>
 public:
 	DataArray(string file);
 	~DataArray(){}
+	UINT GetCount(){return count;}
 
 	ArrayAcessor<S> operator[](UINT pos);
 };

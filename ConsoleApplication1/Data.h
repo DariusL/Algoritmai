@@ -39,7 +39,7 @@ template <class H, class S>
 S Data<H, S>::Read(UINT pos)
 {
 	S ret;
-	data.seekg(pos * sSize);
+	data.seekg(hSize + pos * sSize);
 	data.read((char*)&ret, sSize);
 	return ret;
 }
