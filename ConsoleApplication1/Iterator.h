@@ -14,21 +14,29 @@ public:
 	Iterator(DataList<S> *data, UINT entry);
 	~Iterator(){}
 
-	S Get();
-	void Put(S what);
+	S Get() const;
+	void Put(S what) const;
 
 	bool Prev();
 	bool Next();
 
-	bool HasPrev();
-	bool HasNext();
+	Iterator<S> GetNext() const;
+	Iterator<S> GetPrev() const;
+
+	bool HasPrev() const;
+	bool HasNext() const;
 
 	void Remove();
 
-	bool operator==(const Iterator<S> &other);
-	bool operator!=(const Iterator<S> &other){return !(*this == other);}
+	bool IsNext(const Iterator<S> &other) const;
+	bool IsPrev(const Iterator<S> &other) const;
+
+	bool operator==(const Iterator<S> &other) const;
+	bool operator!=(const Iterator<S> &other) const {return !(*this == other);}
 
 	static Iterator<S> GetMiddleIterator(const Iterator<S> &left, const Iterator<S> &right);
+private:
+	ListEntry<S> GetEntry() const;
 };
 
 template <class S>
@@ -39,17 +47,17 @@ Iterator<S>::Iterator(DataList<S> *data, UINT entry)
 }
 
 template <class S>
-S Iterator<S>::Get()
+S Iterator<S>::Get() const
 {
-	return data->Read(entry).data;
+	return GetEntry().data;
 }
 
 template <class S>
-void Iterator<S>::Put(S what)
+void Iterator<S>::Put(S what) const
 {
 	if(!data->Valid(entry))
 		return;
-	ListEntry<S> e = data->Read(pos);
+	ListEntry<S> e = GetEntry();
 	e.data = what;
 	data->Write(e, pos);
 }
@@ -57,7 +65,7 @@ void Iterator<S>::Put(S what)
 template <class S>
 bool Iterator<S>::Prev()
 {
-	ListEntry<S> e = data->Read(entry);
+	ListEntry<S> e = GetEntry();
 	if(data->Valid(e.prev))
 	{
 		entry = e.prev;
@@ -69,7 +77,7 @@ bool Iterator<S>::Prev()
 template <class S>
 bool Iterator<S>::Next()
 {
-	ListEntry<S> e = data->Read(entry);
+	ListEntry<S> e = GetEntry();
 	if(data->Valid(e.next))
 	{
 		entry = e.next;
@@ -79,27 +87,32 @@ bool Iterator<S>::Next()
 }
 
 template <class S>
-bool Iterator<S>::HasPrev()
+bool Iterator<S>::HasPrev() const
 {
-	UINT prev = data->Read(entry).prev;
+	UINT prev = GetEntry().prev;
 	return data->Valid(prev);
 }
 
 template <class S>
-bool Iterator<S>::HasNext()
+bool Iterator<S>::HasNext() const
 {
-	UINT next = data->Read(entry).next;
+	UINT next = GetEntry().next;
 	return data->Valid(next);
 }
 
 template <class S>
 void Iterator<S>::Remove()
 {
+	if(HasNext())
+	{
+		ListEntry<S> e = GetEntry();
+		entry = e.next;
+	}
 	data->Remove(*this);
 }
 
 template <class S>
-bool Iterator<S>::operator==(const Iterator<S> &other)
+bool Iterator<S>::operator==(const Iterator<S> &other) const
 {
 	return data == other.data && entry == other.entry;
 }
@@ -116,4 +129,36 @@ Iterator<S> Iterator<S>::GetMiddleIterator(const Iterator<S> &left, const Iterat
 		it2.Next();
 	}
 	return it1;
+}
+
+template <class S>
+Iterator<S> Iterator<S>::GetNext() const
+{
+	ListEntry<S> e = GetEntry();
+	return Iterator<S>(data, e.next);
+}
+
+template <class S>
+Iterator<S> Iterator<S>::GetPrev() const
+{
+	ListEntry<S> e = GetEntry();
+	return Iterator<S>(data, e.prev);
+}
+
+template <class S>
+bool Iterator<S>::IsNext(const Iterator<S> &other) const
+{
+	return GetNext() == other;
+}
+
+template <class S>
+bool Iterator<S>::IsPrev(const Iterator<S> &other) const
+{
+	return GetPrev() == other;
+}
+
+template <class S>
+ListEntry<S> Iterator<S>::GetEntry() const
+{
+	return data->Read(entry);
 }

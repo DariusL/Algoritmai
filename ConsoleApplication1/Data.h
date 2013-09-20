@@ -17,13 +17,14 @@ private:
 public:
 	Data(string file);
 	virtual ~Data();
+	void Delete();
+	bool IsEmpty();
+	UINT SegmentCount();
 protected:
 	S Read(UINT pos);
 	void Write(const S &what, UINT pos);
 	H ReadHeader();
 	void WriteHeader(const H &header);
-	bool IsEmpty();
-	UINT SegmentCount();
 };
 
 template <class H, class S>
@@ -99,4 +100,11 @@ UINT Data<H, S>::SegmentCount()
 	data.seekg(0, ios::end);
 	UINT size = data.tellg();
 	return (size - hSize) / sSize;
+}
+
+template <class H, class S>
+void Data<H, S>::Delete()
+{
+	data.close();
+	remove(file.c_str());
 }

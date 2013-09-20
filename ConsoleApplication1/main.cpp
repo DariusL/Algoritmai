@@ -5,6 +5,13 @@
 #include <random>
 #include <functional>
 #include <ctime>
+
+template <class S>
+void Merge(DataList<S> &data);
+
+template <class S>
+void Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right);
+
 int main()
 {
 	default_random_engine gen;
@@ -22,6 +29,27 @@ int main()
 		it.Get();
 	readTime = clock() - readTime;
 	cout << "gen - " << genTime / (double)CLOCKS_PER_SEC << endl << "read - " << readTime / (double)CLOCKS_PER_SEC << endl;
+	data.Delete();
 	system("pause");
 	return 0;
+}
+
+template <class S>
+void Merge(DataList<S> &data)
+{
+	Merge(data, data.Begin().GetNext(), data.End().GetPrev());
+}
+
+template <class S>
+void Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right)
+{
+	if(left == right)
+		return;
+	if(left.IsNext(right))
+	{
+		if(left.Get() < right.Get())
+		{
+			data->Swap(left, right);
+		}
+	}
 }

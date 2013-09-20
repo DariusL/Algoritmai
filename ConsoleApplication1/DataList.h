@@ -133,6 +133,10 @@ void DataList<S>::InsertAfter(const Iterator<S> &it, const S &data)
 	Write(entry, entryInd);
 	Write(prev, prevInd);
 	Write(next, nextInd);
+
+	ListHeader h = ReadHeader();
+	h.count++;
+	WriteHeader(h);
 }
 
 template <class S>
