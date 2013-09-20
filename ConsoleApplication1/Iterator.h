@@ -7,6 +7,7 @@ class DataList;
 template <class S>
 class Iterator
 {
+	friend class DataList<S>;
 	DataList<S> *data;
 	UINT entry;
 public:
@@ -21,6 +22,8 @@ public:
 
 	bool HasPrev();
 	bool HasNext();
+
+	void Remove();
 };
 
 template <class S>
@@ -39,6 +42,8 @@ S Iterator<S>::Get()
 template <class S>
 void Iterator<S>::Put(S what)
 {
+	if(!data->Valid(entry))
+		return;
 	ListEntry<S> e = data->Read(pos);
 	e.data = what;
 	data->Write(e, pos);
@@ -48,7 +53,7 @@ template <class S>
 bool Iterator<S>::Prev()
 {
 	ListEntry<S> e = data->Read(entry);
-	if(e.prev != 0)
+	if(data->Valid(e.prev))
 	{
 		entry = e.prev;
 		return true;
@@ -60,7 +65,7 @@ template <class S>
 bool Iterator<S>::Next()
 {
 	ListEntry<S> e = data->Read(entry);
-	if(e.next != 0)
+	if(data->Valid(e.next))
 	{
 		entry = e.next;
 		return true;
@@ -71,11 +76,19 @@ bool Iterator<S>::Next()
 template <class S>
 bool Iterator<S>::HasPrev()
 {
-	return data->Read(entry).prev != 0;
+	UINT prev = data->Read(entry).prev;
+	return data->Valid(prev);
 }
 
 template <class S>
 bool Iterator<S>::HasNext()
 {
-	return data->Read(entry).next != 0;
+	UINT next = data->Read(entry).next;
+	return data->Valid(next);
+}
+
+template <class S>
+void Iterator<S>::Remove()
+{
+	
 }
