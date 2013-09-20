@@ -24,6 +24,11 @@ public:
 	bool HasNext();
 
 	void Remove();
+
+	bool operator==(const Iterator<S> &other);
+	bool operator!=(const Iterator<S> &other){return !(*this == other);}
+
+	static Iterator<S> GetMiddleIterator(const Iterator<S> &left, const Iterator<S> &right);
 };
 
 template <class S>
@@ -91,4 +96,24 @@ template <class S>
 void Iterator<S>::Remove()
 {
 	data->Remove(*this);
+}
+
+template <class S>
+bool Iterator<S>::operator==(const Iterator<S> &other)
+{
+	return data == other.data && entry == other.entry;
+}
+
+template <class S>
+Iterator<S> Iterator<S>::GetMiddleIterator(const Iterator<S> &left, const Iterator<S> &right)
+{
+	Iterator<S> it1 = left;
+	Iterator<S> it2 = left;
+	while(it2 != right)
+	{
+		it1.Next();
+		it2.Next();
+		it2.Next();
+	}
+	return it1;
 }
