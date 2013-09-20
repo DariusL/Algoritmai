@@ -18,6 +18,6 @@ public:
 template <class S>
 Iterator<S> DataList<S>::Begin()
 {
-	auto header = ReadHeader();
+	ListHeader header = ReadHeader();
 	return Iterator<S>(this, header.first);
 }

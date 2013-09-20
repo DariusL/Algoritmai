@@ -5,6 +5,6 @@
 struct ListHeader
 {
 	UINT count;
-	UINT firts;
+	UINT first;
 	UINT last;
 };
