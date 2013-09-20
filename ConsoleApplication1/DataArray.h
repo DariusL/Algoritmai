@@ -1,19 +1,26 @@
 #pragma once
 #include "data.h"
 #include "ArrayAccessor.h"
-template <class T>
-class DataArray : public Data<T>
+template <class S>
+class DataArray : public Data<UINT, S>
 {
-	friend class ArrayAcessor<T>;
+	friend class ArrayAcessor<S>;
+	UINT count;
 public:
-	DataArray(string file) : Data(file){}
+	DataArray(string file);
 	~DataArray(){}
 
-	ArrayAcessor<T> operator[](long long pos);
+	ArrayAcessor<S> operator[](UINT pos);
 };
 
-template <class T>
-ArrayAcessor<T> DataArray<T>::operator[](long long pos)
+template <class S>
+ArrayAcessor<S> DataArray<S>::operator[](UINT pos)
 {
-	return ArrayAcessor<T>(this, pos);
+	return ArrayAcessor<S>(this, pos);
+}
+
+template <class S>
+DataArray<S>::DataArray(string file) : Data(file)
+{
+	count = ReadHeader();
 }

@@ -3,47 +3,66 @@
 #include <fstream>
 using namespace std;
 
-template <class T>
+typedef unsigned int UINT;
+
+template <class H, class S>
 class Data
 {
 private:
 	fstream data;
-	int tSize;
+	int hSize;
+	int sSize;
 public:
-	Data(string file) : data(file, ios::binary | ios::in | ios::out){tSize = sizeof(T);}
+	Data(string file);
 	virtual ~Data();
 protected:
-	T Read(long long pos);
-	void Write(T what, long long pos);
-	bool Valid(long long pos);
+	S Read(UINT pos);
+	void Write(S what, UINT pos);
+	H ReadHeader();
+	void WriteHeader(H header);
 };
 
-template <class T>
-Data<T>::~Data()
+template <class H, class S>
+Data<H, S>::Data(string file) : data(file, ios::binary | ios::in | ios::out)
+{
+	hSize = sizeof(H);
+	sSize = sizeof(S);
+}
+
+template <class H, class S>
+Data<H, S>::~Data()
 {
 	data.close();
 }
 
-template <class T>
-T Data<T>::Read(long long pos)
+template <class H, class S>
+S Data<H, S>::Read(UINT pos)
 {
-	T ret;
-	data.seekg(pos * tSize);
-	data.read((char*)&ret, tSize);
+	S ret;
+	data.seekg(pos * sSize);
+	data.read((char*)&ret, sSize);
 	return ret;
 }
 
-template <class T>
-void Data<T>::Write(T what, long long pos)
+template <class H, class S>
+void Data<H, S>::Write(S what, UINT pos)
 {
-	data.seekg(pos * tSize);
-	data.write((char*)&what, tSize);
+	data.seekg(hSize + pos * sSize);
+	data.write((char*)&what, sSize);
 }
 
-template <class T>
-bool Valid(long long pos)
+template <class H, class S>
+H Data<H, S>::ReadHeader()
 {
-	data.seekg(0, stream.end);
-	int size = data.tellg();
-	return pos >= 0 && pos <= size;
+	H ret;
+	data.seekg(0);
+	data.read((char*)&ret, hSize);
+	return ret;
+}
+
+template <class H, class S>
+void Data<H, S>::WriteHeader(H header)
+{
+	data.seekg(0);
+	data.write((char*)&header, hSize);
 }

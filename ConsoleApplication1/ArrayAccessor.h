@@ -1,36 +1,36 @@
 #pragma once
 
-template<class T>
+template<class S>
 class DataArray;
 
-template <class T>
+template <class S>
 class ArrayAcessor
 {
-	DataArray<T> *data;
-	long long ind;
+	DataArray<S> *data;
+	UINT ind;
 public:
-	ArrayAcessor(DataArray<T> *data, long long ind);
+	ArrayAcessor(DataArray<S> *data, UINT ind);
 	~ArrayAcessor(){}
 
-	operator T();
-	void operator =(T data);
+	operator S();
+	void operator =(S data);
 };
 
-template<class T>
-ArrayAcessor<T>::ArrayAcessor(DataArray<T> *data, long long ind)
+template<class S>
+ArrayAcessor<S>::ArrayAcessor(DataArray<S> *data, UINT ind)
 {
 	this->data = data;
 	this->ind = ind;
 }
 
-template<class T>
-ArrayAcessor<T>::operator T()
+template<class S>
+ArrayAcessor<S>::operator S()
 {
 	return data->Read(ind);
 }
 
-template <class T>
-void ArrayAcessor<T>::operator=(T data)
+template <class S>
+void ArrayAcessor<S>::operator=(S data)
 {
 	this->data->Write(data, ind);
 }
