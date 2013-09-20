@@ -1,17 +1,20 @@
 #pragma once
-#include "Data.h"
+#include "ListEntry.h"
 
-template <class T>
+template<class S>
+class DataList;
+
+template <class S>
 class Iterator
 {
-	Data<T> *data;
-	long long pos;
+	DataList<S> *data;
+	UINT entry;
 public:
-	Iterator(Data<T> data);
+	Iterator(DataList<S> data, UINT entry);
 	~Iterator();
 
-	T Get();
-	void Put(T what);
+	S Get();
+	void Put(S what);
 
 	bool Previous();
 	bool Next();
@@ -20,27 +23,27 @@ public:
 	bool HasNext();
 };
 
-template <class T>
-Iterator<T>::Iterator(Data<T> data)
+template <class S>
+Iterator<S>::Iterator(DataList<S> data, UINT entry)
 {
 	this->data = data;
-	pos = 0;
+	this->entry = entry;
 }
 
-template <class T>
-T Iterator<T>::Get()
+template <class S>
+S Iterator<S>::Get()
 {
-	return data->Read(pos);
+	return data->Read(entry);
 }
 
-template <class T>
-void Iterator<T>::Put(T what)
+template <class S>
+void Iterator<S>::Put(S what)
 {
 	data->Write(what, pos);
 }
 
-template <class T>
-bool Iterator<T>::HasPrevious()
+template <class S>
+bool Iterator<S>::HasPrevious()
 {
 
 }

@@ -30,6 +30,15 @@
     <ClInclude Include="DataList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ListEntry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ListHeader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

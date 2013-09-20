@@ -2,18 +2,22 @@
 
 #include "Data.h"
 #include "Iterator.h"
-template <class T>
-class DataList : public Data<T>
+#include "ListEntry.h"
+#include "ListHeader.h"
+template <class S>
+class DataList : public Data<ListHeader, ListEntry<S>>
 {
-	friend class Iterator;
+	friend class Iterator<S>;
+public:
 	DataList(string file) : Data(file){}
 	~DataList(){}
 
-	Iterator<T> Begin();
+	Iterator<S> Begin();
 };
 
-template <class T>
-Iterator<T> DataList<T>::Begin()
+template <class S>
+Iterator<S> DataList<S>::Begin()
 {
-	return Iterator<T>(this);
+	auto header = ReadHeader();
+	return Iterator<S>(this, header.first);
 }

@@ -82,7 +82,10 @@
     <ClInclude Include="Data.h" />
     <ClInclude Include="DataArray.h" />
     <ClInclude Include="DataList.h" />
+    <ClInclude Include="Globals.h" />
     <ClInclude Include="Iterator.h" />
+    <ClInclude Include="ListEntry.h" />
+    <ClInclude Include="ListHeader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

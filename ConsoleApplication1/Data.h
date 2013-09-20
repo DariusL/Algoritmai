@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 #include <fstream>
-using namespace std;
 
-typedef unsigned int UINT;
+#include "Globals.h"
+using namespace std;
 
 template <class H, class S>
 class Data
