@@ -24,6 +24,7 @@ public:
 	void Print();
 	bool IsBegin(const Iterator<S> &it);
 	bool IsEnd(const Iterator<S> &it);
+	bool IsSorted();
 private:
 	bool Valid(UINT pos);
 	bool Empty(UINT pos);
@@ -237,4 +238,18 @@ bool DataList<S>::IsEnd(const Iterator<S> &it)
 {
 	ListHeader h = ReadHeader();
 	return it.entry == h.last && it.data == this;
+}
+
+template <class S>
+bool DataList<S>::IsSorted()
+{
+	Iterator<S> begin = Begin().GetNext();
+	Iterator<S> end = End();
+	while(!begin.IsNext(end))
+	{
+		if(begin.Get() > begin.GetNext().Get())
+			return false;
+		begin.Next();
+	}
+	return true;
 }

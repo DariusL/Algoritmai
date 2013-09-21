@@ -50,7 +50,6 @@ Data<H, S>::~Data()
 template <class H, class S>
 Data<H, S>::Data(Data<H, S> &&other)
 {
-	cout << "move" << endl;
 	data = move(other.data);
 	file = other.file;
 	hSize = other.hSize;
@@ -61,7 +60,6 @@ Data<H, S>::Data(Data<H, S> &&other)
 template <class H, class S>
 Data<H, S>::Data(Data<H, S> &other)
 {
-	cout << "copy" << endl;
 	file = other.file + " copy";
 	hSize = other.hSize;
 	sSize = other.sSize;

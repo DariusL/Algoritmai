@@ -18,13 +18,24 @@ int main()
 	//uniform_int_distribution<UINT> dist(1, numeric_limits<UINT>::max() - 1);
 	uniform_int_distribution<UINT> dist(1, 30);
 	auto num = bind(dist, gen);
+	UINT count = 1000;
 	DataList<UINT> data("input");
 	auto it = data.Begin();
-	for(UINT i = 0; i < 100; i++)
+	UINT genTime = clock();
+	for(UINT i = 0; i < count; i++)
 		data.InsertAfter(it, num());
-	data.Print();
+	genTime = clock() - genTime;
+	UINT sortTime = clock();
 	DataList<UINT> sorted = Merge<UINT>(data);
-	sorted.Print();
+	sortTime = clock() - sortTime;
+	UINT checkTime = clock();
+	bool isSorted = sorted.IsSorted();
+	checkTime = clock() - sortTime;
+	cout << "sorting " << count << " item list" << endl;
+	cout << (isSorted ? "sorted" : "not sorted") << endl;
+	cout << "gen time " << genTime / (double)CLOCKS_PER_SEC << endl;
+	cout << "sort time " << sortTime / (double)CLOCKS_PER_SEC << endl;
+	cout << "check time " << checkTime / (double)CLOCKS_PER_SEC << endl;
 	system("pause");
 	return 0;
 }
