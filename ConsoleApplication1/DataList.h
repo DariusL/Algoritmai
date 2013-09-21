@@ -19,6 +19,9 @@ public:
 	bool Valid(const Iterator<S> &it);
 	void InsertAfter(const Iterator<S> &it, const S &data);
 	void Swap(const Iterator<S> &left, const Iterator<S> right);
+	void Print();
+	bool IsBegin(const Iterator<S> &it);
+	bool IsEnd(const Iterator<S> &it);
 private:
 	bool Valid(UINT pos);
 	bool Empty(UINT pos);
@@ -94,7 +97,7 @@ template <class S>
 bool DataList<S>::Valid(UINT pos)
 {
 	ListHeader h = ReadHeader();
-	return pos != h.first && pos != h.last && pos != 0;
+	return pos != 0;
 }
 
 template <class S>
@@ -155,4 +158,31 @@ void DataList<S>::Swap(const Iterator<S> &left, const Iterator<S> right)
 		Write(le, left.entry);
 		Write(re, right.entry);
 	}
+}
+
+template <class S>
+void DataList<S>::Print()
+{
+	Iterator<S> b = Begin();
+	b.Next();
+	while(!IsEnd(b))
+	{
+		cout << b.Get() << endl;
+		b.Next();
+	}
+	cout << endl;
+}
+
+template <class S>
+bool DataList<S>::IsBegin(const Iterator<S> &it)
+{
+	ListHeader h = ReadHeader();
+	return it.entry == h.first;
+}
+
+template <class S>
+bool DataList<S>::IsEnd(const Iterator<S> &it)
+{
+	ListHeader h = ReadHeader();
+	return it.entry == h.last;
 }

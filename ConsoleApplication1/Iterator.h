@@ -126,6 +126,8 @@ Iterator<S> Iterator<S>::GetMiddleIterator(const Iterator<S> &left, const Iterat
 	{
 		it1.Next();
 		it2.Next();
+		if(it2 == right)
+			break;
 		it2.Next();
 	}
 	return it1;
