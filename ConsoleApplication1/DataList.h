@@ -34,21 +34,18 @@ private:
 template <class S>
 DataList<S>::DataList(string file) : Data(file)
 {
-	if(IsEmpty())
-	{
-		ListHeader header;
-		header.count = 0;
-		header.first = 1;
-		header.last = 2;
-		WriteHeader(header);
-		ListEntry<S> entry;
-		entry.prev = 0;
-		entry.next = 2;
-		Write(entry, 1);
-		entry.prev = 1;
-		entry.next = 0;
-		Write(entry, 2);
-	}
+	ListHeader header;
+	header.count = 0;
+	header.first = 1;
+	header.last = 2;
+	WriteHeader(header);
+	ListEntry<S> entry;
+	entry.prev = 0;
+	entry.next = 2;
+	Write(entry, 1);
+	entry.prev = 1;
+	entry.next = 0;
+	Write(entry, 2);
 	firstMaybeEmpty = SegmentCount();
 }
 

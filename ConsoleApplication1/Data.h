@@ -19,10 +19,13 @@ public:
 	Data(string file);
 	Data(Data<H, S> &&other);
 	Data(Data<H, S> &other);
+	Data<H, S> &operator=(Data<H, S> &other);
 	virtual ~Data();
 	void Delete();
-	bool IsEmpty();
 	UINT SegmentCount();
+
+	virtual bool IsSorted() = 0;
+	virtual void Print() = 0;
 protected:
 	S Read(UINT pos);
 	void Write(const S &what, UINT pos);
@@ -77,11 +80,24 @@ Data<H, S>::Data(Data<H, S> &other)
 }
 
 template <class H, class S>
-bool Data<H, S>::IsEmpty()
+Data<H, S> &Data<H, S>::operator=(Data<H, S> &other)
 {
-	data.seekg(0, ios_base::end);
-	int size = data.tellg();
-	return size <= 0;
+	if(this != &other)
+	{
+		data.close();
+		Delete();
+		file = other.file + " copy";
+		data = fstream(file, OPEN_FLAGS);
+		WriteHeader(other.ReadHeader());
+		S segment;
+		UINT count = other.SegmentCount();
+		for(UINT i = 0; i < count; i++)
+		{
+			segment = other.Read(i);
+			data.write((char*)&segment, sSize);
+		}
+	}
+	return *this;
 }
 
 template <class H, class S>

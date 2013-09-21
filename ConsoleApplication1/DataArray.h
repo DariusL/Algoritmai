@@ -5,12 +5,13 @@ template <class S>
 class DataArray : public Data<UINT, S>
 {
 	friend class ArrayAcessor<S>;
-	UINT count;
 public:
-	DataArray(string file);
+	DataArray(string file, UINT size);
 	~DataArray(){}
 	DataArray(DataArray<S> &&other);
-	UINT GetCount(){return count;}
+	UINT GetCount();
+	bool IsSorted();
+	void Print();
 
 	ArrayAcessor<S> operator[](UINT pos);
 };
@@ -22,15 +23,40 @@ ArrayAcessor<S> DataArray<S>::operator[](UINT pos)
 }
 
 template <class S>
-DataArray<S>::DataArray(string file) : Data(file)
+DataArray<S>::DataArray(string file, UINT size) : Data(file)
 {
-	if(IsEmpty())
-		WriteHeader(0);
-	count = ReadHeader();
+	WriteHeader(size);
 }
 
 template <class S>
 DataArray<S>::DataArray(DataArray<S> &&other) : Data(forward<DataArray<S>>(other))
 {
-	count = other.count;
+}
+
+template <class S>
+UINT DataArray<S>::GetCount()
+{
+	return ReadHeader();
+}
+
+template <class S>
+bool DataArray<S>::IsSorted()
+{
+	UINT count = GetCount();
+	for(UINT i = 0; i < count - 1; i++)
+	{
+		if(Read(i) > Read(i+1))
+			return false;
+	}
+	return true;
+}
+
+template <class S>
+void DataArray<S>::Print()
+{
+	UINT count = GetCount();
+	for(UINT i = 0; i < count; i++)
+	{
+		cout << Read(i) << endl;
+	}
 }
