@@ -14,6 +14,7 @@ private:
 	string file;
 	int hSize;
 	int sSize;
+	static const int OPEN_FLAGS = ios::binary | ios::in | ios::out | ios::trunc;
 public:
 	Data(string file);
 	Data(Data<H, S> &&other);
@@ -30,7 +31,7 @@ protected:
 };
 
 template <class H, class S>
-Data<H, S>::Data(string file) : data(file, ios::binary | ios::in | ios::out)
+Data<H, S>::Data(string file) : data(file, OPEN_FLAGS)
 {
 	hSize = sizeof(H);
 	sSize = sizeof(S);
@@ -63,7 +64,7 @@ Data<H, S>::Data(Data<H, S> &other)
 	file = other.file + " copy";
 	hSize = other.hSize;
 	sSize = other.sSize;
-	data = fstream(file, ios::binary | ios::out);
+	data = fstream(file, OPEN_FLAGS);
 	H header = other.ReadHeader();
 	S segment;
 	data.write((char*)&header, hSize);
@@ -73,8 +74,6 @@ Data<H, S>::Data(Data<H, S> &other)
 		segment = other.Read(i);
 		data.write((char*)&segment, sSize);
 	}
-	data.close();
-	data.open(file, ios::binary | ios::in | ios::out);
 }
 
 template <class H, class S>
@@ -116,18 +115,8 @@ H Data<H, S>::ReadHeader()
 template <class H, class S>
 void Data<H, S>::WriteHeader(const H &header)
 {
-	if(!data.is_open())
-	{
-		data.open(file, ios::binary | ios::out);
-		data.write((char*)&header, hSize);
-		data.close();
-		data.open(file, ios::binary | ios::in | ios::out);
-	}
-	else
-	{
-		data.seekg(0);
-		data.write((char*)&header, hSize);
-	}
+	data.seekg(0);
+	data.write((char*)&header, hSize);
 }
 
 template <class H, class S>

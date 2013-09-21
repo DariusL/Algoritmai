@@ -15,10 +15,9 @@ DataList<S> Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right);
 int main()
 {
 	default_random_engine gen;
-	//uniform_int_distribution<UINT> dist(1, numeric_limits<UINT>::max() - 1);
-	uniform_int_distribution<UINT> dist(1, 30);
+	uniform_int_distribution<UINT> dist(1, numeric_limits<UINT>::max());
 	auto num = bind(dist, gen);
-	UINT count = 1000;
+	UINT count = 10000;
 	DataList<UINT> data("input");
 	auto it = data.Begin();
 	UINT genTime = clock();
