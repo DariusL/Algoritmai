@@ -17,7 +17,8 @@ public:
 	Iterator<S> End();
 	void Remove(Iterator<S> &it);
 	bool Valid(const Iterator<S> &it);
-	void InsertAfter(const Iterator<S> &it, const S &data);
+	bool InsertAfter(const Iterator<S> &it, const S &data);
+	bool InsertBefore(const Iterator<S> &it, const S &data);
 	void Swap(const Iterator<S> &left, const Iterator<S> right);
 	void Print();
 	bool IsBegin(const Iterator<S> &it);
@@ -115,31 +116,75 @@ UINT DataList<S>::New()
 }
 
 template <class S>
-void DataList<S>::InsertAfter(const Iterator<S> &it, const S &data)
+bool DataList<S>::InsertAfter(const Iterator<S> &it, const S &data)
 {
-	ListEntry<S> entry, prev, next;
-	UINT entryInd, prevInd, nextInd;
+	if(IsEnd(it))
+	{
+		return false;
+	}
+	else
+	{
+		ListEntry<S> entry, prev, next;
+		UINT entryInd, prevInd, nextInd;
 
-	prevInd = it.entry;
-	prev = Read(prevInd);
-	nextInd = prev.next;
-	next = Read(nextInd);
-	entryInd = New();
+		prevInd = it.entry;
+		prev = Read(prevInd);
+		nextInd = prev.next;
+		next = Read(nextInd);
+		entryInd = New();
 
-	entry.data = data;
-	entry.prev = prevInd;
-	entry.next = nextInd;
+		entry.data = data;
+		entry.prev = prevInd;
+		entry.next = nextInd;
 
-	prev.next = entryInd;
-	next.prev = entryInd;
+		prev.next = entryInd;
+		next.prev = entryInd;
 
-	Write(entry, entryInd);
-	Write(prev, prevInd);
-	Write(next, nextInd);
+		Write(entry, entryInd);
+		Write(prev, prevInd);
+		Write(next, nextInd);
 
-	ListHeader h = ReadHeader();
-	h.count++;
-	WriteHeader(h);
+		ListHeader h = ReadHeader();
+		h.count++;
+		WriteHeader(h);
+		return true;
+	}
+}
+
+template <class S>
+bool DataList<S>::InsertBefore(const Iterator<S> &it, const S &data)
+{
+	if(IsBegin(it))
+	{
+		return false;
+	}
+	else
+	{
+		ListEntry<S> entry, prev, next;
+		UINT entryInd, prevInd, nextInd;
+
+		nextInd = it.entry;
+		next = Read(nextInd);
+		prevInd = next.prev;
+		prev = Read(prevInd);
+		entryInd = New();
+
+		entry.data = data;
+		entry.prev = prevInd;
+		entry.next = nextInd;
+
+		prev.next = entryInd;
+		next.prev = entryInd;
+
+		Write(entry, entryInd);
+		Write(prev, prevInd);
+		Write(next, nextInd);
+
+		ListHeader h = ReadHeader();
+		h.count++;
+		WriteHeader(h);
+		return true;
+	}
 }
 
 template <class S>
@@ -177,12 +222,12 @@ template <class S>
 bool DataList<S>::IsBegin(const Iterator<S> &it)
 {
 	ListHeader h = ReadHeader();
-	return it.entry == h.first;
+	return it.entry == h.first && it.data == this;
 }
 
 template <class S>
 bool DataList<S>::IsEnd(const Iterator<S> &it)
 {
 	ListHeader h = ReadHeader();
-	return it.entry == h.last;
+	return it.entry == h.last && it.data == this;
 }

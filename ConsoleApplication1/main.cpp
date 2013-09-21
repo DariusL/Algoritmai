@@ -7,10 +7,10 @@
 #include <ctime>
 
 template <class S>
-void Merge(DataList<S> &data);
+DataList<S> Merge(DataList<S> &data);
 
 template <class S>
-void Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right);
+DataList<S> Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right);
 
 int main()
 {
@@ -18,55 +18,87 @@ int main()
 	//uniform_int_distribution<UINT> dist(1, numeric_limits<UINT>::max() - 5);
 	uniform_int_distribution<UINT> dist(1, 30);
 	auto num = bind(dist, gen);
-	DataList<UINT> data("duomenys.bin");
+	DataList<UINT> data("input");
 	auto it = data.Begin();
-	for(UINT i = 0; i < 8; i++)
+	for(UINT i = 0; i < 100; i++)
 		data.InsertAfter(it, num());
 	data.Print();
-	//Merge<UINT>(data);
-	data.Print();
-	data.Delete();
+	DataList<UINT> sorted = Merge<UINT>(data);
+	sorted.Print();
 	system("pause");
 	return 0;
 }
 
 template <class S>
-void Merge(DataList<S> &data)
+DataList<S> Merge(DataList<S> &data)
 {
-	Merge(data, data.Begin().GetNext(), data.End().GetPrev());
+	return Merge(data, data.Begin().GetNext(), data.End().GetPrev());
 }
 
 template <class S>
-void Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right)
+DataList<S> Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right)
 {
-	if(left != right)
+	DataList<S> ret(left.GetSomeString() + " " + right.GetSomeString());
+	Iterator<S> begin = ret.Begin();
+	Iterator<S> end = ret.End();
+	if(left == right)
 	{
-		if(left.IsNext(right))
+		ret.InsertAfter(begin, left.Get());
+	}
+	else if(left.IsNext(right))
+	{
+		S one = left.Get();
+		S two = right.Get();
+		if(one < two)
 		{
-			if(left.Get() > right.Get())
-			{
-				data.Swap(left, right);
-			}
+			ret.InsertAfter(begin, one);
+			begin.Next();
+			ret.InsertAfter(begin, two);
 		}
 		else
 		{
-			Iterator<S> middle2 = Iterator<S>::GetMiddleIterator(left, right);
-			Iterator<S> middle1 = middle2.GetPrev();
-			Merge(data, left, middle1);
-			Merge(data, middle2, right);
-			Iterator<S> leftIt = left;
-			Iterator<S> rightIt = middle2;
-			Iterator<S> leftEnd = middle1;
-			Iterator<S> rightEnd = right;
-			while(!leftIt.IsPrev(leftEnd) || !rightIt.IsPrev(rightEnd))
+			ret.InsertAfter(begin, two);
+			begin.Next();
+			ret.InsertAfter(begin, one);
+		}
+	}
+	else
+	{
+		Iterator<S> middle = Iterator<S>::GetMiddleIterator(left, right);
+		DataList<S> oneList = Merge(data, left, middle.GetPrev());
+		DataList<S> twoList = Merge(data, middle, right);
+		Iterator<S> oneIt = oneList.Begin().GetNext();
+		Iterator<S> twoIt = twoList.Begin().GetNext();
+		S one;
+		S two;
+		while(!oneList.IsEnd(oneIt) || !twoList.IsEnd(twoIt))
+		{
+			if(oneList.IsEnd(oneIt))
 			{
-				if(leftIt.Get() > rightIt.Get())
+				ret.InsertBefore(end, twoIt.Get());
+				twoIt.Next();
+			}
+			else if(twoList.IsEnd(twoIt))
+			{
+				ret.InsertBefore(end, oneIt.Get());
+				oneIt.Next();
+			}
+			else
+			{
+				one = oneIt.Get();
+				two = twoIt.Get();
+				if(one < two)
 				{
-					data.Swap(leftIt, rightIt);
+					ret.InsertBefore(end, one);
+					oneIt.Next();
 				}
-				leftIt.Next();
-				rightIt.Next();
+				else
+				{
+					ret.InsertBefore(end, two);
+					twoIt.Next();
+				}
 			}
 		}
 	}
+	return ret;
 }

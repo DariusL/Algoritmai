@@ -16,6 +16,8 @@ private:
 	int sSize;
 public:
 	Data(string file);
+	Data(Data<H, S> &&other);
+	Data(Data<H, S> &other);
 	virtual ~Data();
 	void Delete();
 	bool IsEmpty();
@@ -38,7 +40,41 @@ Data<H, S>::Data(string file) : data(file, ios::binary | ios::in | ios::out)
 template <class H, class S>
 Data<H, S>::~Data()
 {
+	if(file != "")
+	{
+		data.close();
+		Delete();
+	}
+}
+
+template <class H, class S>
+Data<H, S>::Data(Data<H, S> &&other)
+{
+	data = other.data;
+	file = other.file;
+	hSize = other.hSize;
+	sSize = other.sSize;
+	other.file = "";
+}
+
+template <class H, class S>
+Data<H, S>::Data(Data<H, S> &other)
+{
+	file = other.file + " copy";
+	hSize = other.hSize;
+	sSize = other.sSize;
+	data = fstream(file, ios::binary | ios::out);
+	H header = other.ReadHeader();
+	S segment;
+	data.write((char*)&header, hSize);
+	UINT count = other.SegmentCount();
+	for(UINT i = 0; i < count; i++)
+	{
+		segment = other.Read(i);
+		data.write((char*)&segment, sSize);
+	}
 	data.close();
+	data.open(file, ios::binary | ios::in | ios::out);
 }
 
 template <class H, class S>

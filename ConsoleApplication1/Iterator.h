@@ -1,6 +1,8 @@
 #pragma once
 #include "ListEntry.h"
 
+#include <string>
+
 template<class S>
 class DataList;
 
@@ -35,6 +37,7 @@ public:
 	bool operator!=(const Iterator<S> &other) const {return !(*this == other);}
 
 	static Iterator<S> GetMiddleIterator(const Iterator<S> &left, const Iterator<S> &right);
+	string GetSomeString() const {return to_string(entry);}
 private:
 	ListEntry<S> GetEntry() const;
 };
