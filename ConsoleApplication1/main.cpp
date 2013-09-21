@@ -15,7 +15,7 @@ DataList<S> Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right);
 int main()
 {
 	default_random_engine gen;
-	//uniform_int_distribution<UINT> dist(1, numeric_limits<UINT>::max() - 5);
+	//uniform_int_distribution<UINT> dist(1, numeric_limits<UINT>::max() - 1);
 	uniform_int_distribution<UINT> dist(1, 30);
 	auto num = bind(dist, gen);
 	DataList<UINT> data("input");

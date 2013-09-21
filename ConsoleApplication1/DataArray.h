@@ -9,6 +9,7 @@ class DataArray : public Data<UINT, S>
 public:
 	DataArray(string file);
 	~DataArray(){}
+	DataArray(DataArray<S> &&other);
 	UINT GetCount(){return count;}
 
 	ArrayAcessor<S> operator[](UINT pos);
@@ -26,4 +27,10 @@ DataArray<S>::DataArray(string file) : Data(file)
 	if(IsEmpty())
 		WriteHeader(0);
 	count = ReadHeader();
+}
+
+template <class S>
+DataArray<S>::DataArray(DataArray<S> &&other) : Data(forward<DataArray<S>>(other))
+{
+	count = other.count;
 }

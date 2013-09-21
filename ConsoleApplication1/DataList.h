@@ -11,6 +11,7 @@ class DataList : public Data<ListHeader, ListEntry<S>>
 	UINT firstMaybeEmpty;
 public:
 	DataList(string file);
+	DataList(DataList<S> &&other);
 	~DataList(){}
 
 	Iterator<S> Begin();
@@ -48,6 +49,12 @@ DataList<S>::DataList(string file) : Data(file)
 		Write(entry, 2);
 	}
 	firstMaybeEmpty = SegmentCount();
+}
+
+template <class S>
+DataList<S>::DataList(DataList<S> &&other) : Data(forward<DataList<S>> (other))
+{
+	firstMaybeEmpty = other.firstMaybeEmpty;
 }
 
 template <class S>
