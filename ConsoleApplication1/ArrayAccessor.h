@@ -12,8 +12,9 @@ public:
 	ArrayAcessor(DataArray<S> *data, UINT ind);
 	~ArrayAcessor(){}
 
-	operator S();
+	operator S ();
 	void operator =(S data);
+	void operator =(ArrayAcessor<S> &other);
 };
 
 template<class S>
@@ -24,7 +25,7 @@ ArrayAcessor<S>::ArrayAcessor(DataArray<S> *data, UINT ind)
 }
 
 template<class S>
-ArrayAcessor<S>::operator S()
+ArrayAcessor<S>::operator S ()
 {
 	return data->Read(ind);
 }
@@ -33,4 +34,10 @@ template <class S>
 void ArrayAcessor<S>::operator=(S data)
 {
 	this->data->Write(data, ind);
+}
+
+template <class S>
+void ArrayAcessor<S>::operator=(ArrayAcessor<S> &other)
+{
+	this->data->Write(other(), ind);
 }

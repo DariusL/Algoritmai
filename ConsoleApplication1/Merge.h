@@ -84,8 +84,7 @@ DataArray<S> Merge(DataArray<S> &data, UINT left, UINT right)
 	DataArray<S> ret(to_string(left) + " " + to_string(right), right - left + 1);
 	if(left == right)
 	{
-		S temp = data[left];
-		ret[0] = temp;
+		ret[0] = data[left];
 	}
 	else
 	{
@@ -104,14 +103,12 @@ DataArray<S> Merge(DataArray<S> &data, UINT left, UINT right)
 		{
 			if(oneIt == oneCount)
 			{
-				two = twoArr[twoIt];
-				ret[i] = two;
+				ret[i] = twoArr[twoIt];
 				twoIt++;
 			}
 			else if(twoIt == twoCount)
 			{
-				one = oneArr[oneIt];
-				ret[i] = one;
+				ret[i] = oneArr[oneIt];
 				oneIt++;
 			}
 			else

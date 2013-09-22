@@ -15,18 +15,15 @@ int main()
 	//uniform_int_distribution<UINT> dist(1, numeric_limits<UINT>::max());
 	uniform_int_distribution<UINT> dist(1, 30);
 	auto num = bind(dist, gen);
-	UINT count = 5;
+	UINT count = 20;
 
-	DataArray<UINT> one("one", 5);
+	DataArray<UINT> one("one", count);
 	for(UINT i = 0; i < count; i++)
 	{
 		one[i] = num();
 	}
 	one.Print();
-	for(UINT i = 0; i < count; i++)
-	{
-		one[i] = one[0];
-	}
+	one = Merge<UINT>(one);
 	one.Print();
 	system("pause");
 	return 0;
