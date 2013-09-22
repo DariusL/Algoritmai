@@ -19,6 +19,12 @@ public:
 template <class S>
 ArrayAcessor<S> DataArray<S>::operator[](UINT pos)
 {
+	UINT count = ReadHeader();
+	if(pos >= count)
+	{
+		count = pos + 1;
+		WriteHeader(count);
+	}
 	return ArrayAcessor<S>(this, pos);
 }
 
@@ -59,4 +65,5 @@ void DataArray<S>::Print()
 	{
 		cout << Read(i) << endl;
 	}
+	cout << endl;
 }

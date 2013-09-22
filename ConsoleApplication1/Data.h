@@ -104,11 +104,8 @@ template <class H, class S>
 S Data<H, S>::Read(UINT pos)
 {
 	S ret;
-	if(pos < SegmentCount())
-	{
-		data.seekg(hSize + pos * sSize);
-		data.read((char*)&ret, sSize);
-	}
+	data.seekg(hSize + pos * sSize);
+	data.read((char*)&ret, sSize);
 	return ret;
 }
 

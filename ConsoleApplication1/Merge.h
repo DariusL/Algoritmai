@@ -14,6 +14,7 @@ DataArray<S> Merge(DataArray<S> &data);
 template <class S>
 DataArray<S> Merge(DataArray<S> &data, UINT left, UINT right);
 
+
 template <class S>
 DataList<S> Merge(DataList<S> &data)
 {
@@ -29,23 +30,6 @@ DataList<S> Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right)
 	if(left == right)
 	{
 		ret.InsertAfter(begin, left.Get());
-	}
-	else if(left.IsNext(right))
-	{
-		S one = left.Get();
-		S two = right.Get();
-		if(one < two)
-		{
-			ret.InsertAfter(begin, one);
-			begin.Next();
-			ret.InsertAfter(begin, two);
-		}
-		else
-		{
-			ret.InsertAfter(begin, two);
-			begin.Next();
-			ret.InsertAfter(begin, one);
-		}
 	}
 	else
 	{
@@ -81,6 +65,68 @@ DataList<S> Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right)
 				{
 					ret.InsertBefore(end, two);
 					twoIt.Next();
+				}
+			}
+		}
+	}
+	return ret;
+}
+
+template <class S>
+DataArray<S> Merge(DataArray<S> &data)
+{
+	return Merge<S>(data, 0, data.GetCount() - 1);
+}
+
+template <class S>
+DataArray<S> Merge(DataArray<S> &data, UINT left, UINT right)
+{
+	DataArray<S> ret(to_string(left) + " " + to_string(right), right - left + 1);
+	if(left == right)
+	{
+		S temp = data[left];
+		ret[0] = temp;
+	}
+	else
+	{
+		UINT middle1 = (left + right) / 2;
+		UINT middle2 = middle1 + 1;
+		DataArray<S> oneArr = Merge(data, left, middle1);
+		DataArray<S> twoArr = Merge(data, middle2, right);
+		UINT oneIt = 0;
+		UINT twoIt = 0;
+		UINT oneCount = oneArr.GetCount();
+		UINT twoCount = twoArr.GetCount();
+		UINT count = ret.GetCount();
+		S one;
+		S two;
+		for(UINT i = 0; i < count; i++)
+		{
+			if(oneIt == oneCount)
+			{
+				two = twoArr[twoIt];
+				ret[i] = two;
+				twoIt++;
+			}
+			else if(twoIt == twoCount)
+			{
+				one = oneArr[oneIt];
+				ret[i] = one;
+				oneIt++;
+			}
+			else
+			{
+				one = oneArr[oneIt];
+				two = twoArr[twoIt];
+				if(one < two)
+				{
+					ret[i] = one;
+					oneIt++;
+				}
+				else
+				{
+					ret[i] = two;
+					twoIt++;
 				}
 			}
 		}
