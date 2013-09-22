@@ -86,6 +86,7 @@
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="ListEntry.h" />
     <ClInclude Include="ListHeader.h" />
+    <ClInclude Include="Merge.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
