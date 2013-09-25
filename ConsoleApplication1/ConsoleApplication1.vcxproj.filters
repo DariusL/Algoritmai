@@ -51,6 +51,9 @@
     <ClInclude Include="MergeSort.h">
       <Filter>Sort</Filter>
     </ClInclude>
+    <ClInclude Include="RadixSort.h">
+      <Filter>Sort</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

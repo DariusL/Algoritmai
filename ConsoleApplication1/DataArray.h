@@ -13,6 +13,8 @@ public:
 	bool IsSorted();
 	void Print();
 	void Swap(UINT a, UINT b);
+	void PushBack(S &item);
+	void Clear();
 
 	ArrayAcessor<S> operator[](UINT pos);
 };
@@ -76,4 +78,16 @@ void DataArray<S>::Swap(UINT a, UINT b)
 	S temp = Read(a);
 	Write(Read(b), a);
 	Write(temp, b);
+}
+
+template <class S>
+void DataArray<S>::PushBack(S &item)
+{
+	(*this)[ReadHeader()] = item;
+}
+
+template <class S>
+void DataArray<S>::Clear()
+{
+	WriteHeader(0);
 }

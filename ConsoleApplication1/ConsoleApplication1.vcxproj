@@ -89,6 +89,7 @@
     <ClInclude Include="ListEntry.h" />
     <ClInclude Include="ListHeader.h" />
     <ClInclude Include="MergeSort.h" />
+    <ClInclude Include="RadixSort.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
