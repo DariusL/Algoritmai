@@ -25,6 +25,7 @@ public:
 	bool IsBegin(const Iterator<S> &it);
 	bool IsEnd(const Iterator<S> &it);
 	bool IsSorted();
+	void Clear();
 private:
 	bool Valid(UINT pos);
 	bool Empty(UINT pos);
@@ -35,7 +36,6 @@ template <class S>
 DataList<S>::DataList(string file) : Data(file)
 {
 	ListHeader header;
-	header.count = 0;
 	header.first = 1;
 	header.last = 2;
 	WriteHeader(header);
@@ -76,9 +76,6 @@ void DataList<S>::Remove(Iterator<S> &it)
 	{
 		if(it.entry < firstMaybeEmpty)
 			firstMaybeEmpty = it.entry;
-		ListHeader h = ReadHeader();
-		h.count--;
-		WriteHeader(h);
 		ListEntry<S> e = Read(it.entry);
 		ListEntry<S> p = Read(e.prev);
 		ListEntry<S> n = Read(e.next);
@@ -148,10 +145,6 @@ bool DataList<S>::InsertAfter(const Iterator<S> &it, const S &data)
 		Write(entry, entryInd);
 		Write(prev, prevInd);
 		Write(next, nextInd);
-
-		ListHeader h = ReadHeader();
-		h.count++;
-		WriteHeader(h);
 		return true;
 	}
 }
@@ -184,10 +177,6 @@ bool DataList<S>::InsertBefore(const Iterator<S> &it, const S &data)
 		Write(entry, entryInd);
 		Write(prev, prevInd);
 		Write(next, nextInd);
-
-		ListHeader h = ReadHeader();
-		h.count++;
-		WriteHeader(h);
 		return true;
 	}
 }
@@ -249,4 +238,30 @@ bool DataList<S>::IsSorted()
 		begin.Next();
 	}
 	return true;
+}
+
+template <class S>
+void DataList<S>::Clear()
+{
+	ListHeader header = ReadHeader();
+	UINT current;
+	UINT next;
+	ListEntry<S> entry;
+	entry = Read(header.first);
+	current = entry.next;
+	while(current != header.last)
+	{
+		entry = Read(current);
+		next = entry.next;
+		entry.next = 0;
+		entry.prev = 0;
+		Write(entry, current);
+		current = next;
+	}
+	entry = Read(header.first);
+	entry.next = header.last;
+	Write(entry, header.first);
+	entry = Read(header.last);
+	entry.prev = header.first;
+	Write(entry, header.last);
 }

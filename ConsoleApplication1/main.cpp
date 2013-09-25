@@ -20,9 +20,21 @@ int main()
 	HeapSort<UINT>(array);
 	time = clock() - time;
 	bool sorted = array.IsSorted();
+	cout << "Array of 5000\n";
 	cout << "Initially sorted " << init << endl;
 	cout << "Sorted " << sorted << endl;
-	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n";
+	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
+
+	auto list = GetRandomList(1, numeric_limits<UINT>::max(), 5000);
+	init = list.IsSorted();
+	time = clock();
+	HeapSort(list);
+	time = clock() - time;
+	sorted = list.IsSorted();
+	cout << "List of 5000\n";
+	cout << "Initially sorted " << init << endl;
+	cout << "Sorted " << sorted << endl;
+	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
 	system("pause");
 	return 0;
 }

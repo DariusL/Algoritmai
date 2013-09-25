@@ -3,21 +3,16 @@
 #include "DataHeap.h"
 
 template <class S>
-DataList<S> HeapSort(DataList<S> &data);
-
-template <class S>
 void HeapSort(DataArray<S> &data);
 
 template <class S>
 void Heapify(DataArray<S> &data);
 
 template <class S>
-void SiftDown(DataArray<S> &data, UINT start, UINT end);
+void SiftDown(DataArray<S> &data, Iterator<S> start, Iterator<S> end);
 
 template <class S>
-DataList<S> HeapSort(DataList<S> &data)
-{
-}
+void HeapSort(DataList<S> &data);
 
 template <class S>
 void HeapSort(DataArray<S> &data)
@@ -70,5 +65,25 @@ void SiftDown(DataArray<S> &data, UINT start, UINT end)
 		{
 			break;
 		}
+	}
+}
+
+template <class S>
+void HeapSort(DataList<S> &data)
+{
+	DataHeap<S> heap("temp heap");
+	Iterator<S> it = data.Begin();
+	it.Next();
+	while(!data.IsEnd(it))
+	{
+		heap.Add(it.Get());
+		it.Next();
+	}
+	data.Clear();
+	it = data.Begin();
+	UINT count = heap.GetCount();
+	for(UINT i = 0; i < count; i++)
+	{
+		data.InsertAfter(it, heap.Pop());
 	}
 }

@@ -12,9 +12,11 @@ public:
 	~DataHeap(){}
 
 	void Add(const S &item);
+	S Pop();
 
 private:
 	void Add(S item, UINT pos);
+	void SiftDown(UINT pos, UINT count);
 };
 
 template <class S>
@@ -36,7 +38,7 @@ DataHeap<S>::DataHeap(DataHeap<S> &&other) : Data(forward<DataHeap<S>>(other))
 template <class S>
 void DataHeap<S>::Add(const S &item)
 {
-	Add(item, SegmentCount());
+	Add(item, GetCount());
 }
 
 template <class S>
@@ -59,5 +61,38 @@ void DataHeap<S>::Add(S item, UINT pos)
 		{
 			(*this)[pos] = item;
 		}
+	}
+}
+
+template <class S>
+S DataHeap<S>::Pop()
+{
+	UINT count = GetCount();
+	S ret = (*this)[0];
+	(*this)[0] = (*this)[count - 1];
+	WriteHeader(count - 1);
+	SiftDown(0, count);
+	return ret;
+}
+
+template <class S>
+void DataHeap<S>::SiftDown(UINT pos, UINT count)
+{
+	UINT child = pos * 2 + 1;
+	UINT swap = pos;
+	if(child < count)
+		if((*this)[swap] < (*this)[child])
+			swap = child;
+	if(child + 1 < count)
+		if((*this)[swap] < (*this)[child + 1])
+			swap = child + 1;
+	if(swap != pos)
+	{
+		Swap(swap, pos);
+		SiftDown(swap, count);
+	}
+	else
+	{
+		return;
 	}
 }

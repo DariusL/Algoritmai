@@ -72,7 +72,7 @@ void DataArray<S>::Print()
 template <class S>
 void DataArray<S>::Swap(UINT a, UINT b)
 {
-	UINT count = SegmentCount();
+	UINT count = GetCount();
 	S temp = Read(a);
 	Write(Read(b), a);
 	Write(temp, b);
