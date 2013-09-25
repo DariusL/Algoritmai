@@ -15,46 +15,68 @@ DataList<UINT> GetRandomList(string name, UINT from, UINT to, UINT count);
 
 int main()
 {
-	auto array = GetRandomArray("heap array", 1, numeric_limits<UINT>::max(), 5000);
-	bool init = array.IsSorted();
+	auto arr = GetRandomArray("tmp", 1, numeric_limits<UINT>::max(), 5000);
+	bool init = arr.IsSorted();
 	UINT time = clock();
-	HeapSort<UINT>(array);
+	HeapSort<UINT>(arr);
 	time = clock() - time;
-	bool sorted = array.IsSorted();
+	bool sorted = arr.IsSorted();
 	cout << "Array of 5000, heap\n";
 	cout << "Initially sorted " << init << endl;
 	cout << "Sorted " << sorted << endl;
 	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
 
-	auto list = GetRandomList("heap list", 1, numeric_limits<UINT>::max(), 5000);
-	init = list.IsSorted();
+	auto lst = GetRandomList("tmp", 1, numeric_limits<UINT>::max(), 5000);
+	init = lst.IsSorted();
 	time = clock();
-	HeapSort(list);
+	HeapSort(lst);
 	time = clock() - time;
-	sorted = list.IsSorted();
+	sorted = lst.IsSorted();
 	cout << "List of 5000, heap\n";
 	cout << "Initially sorted " << init << endl;
 	cout << "Sorted " << sorted << endl;
 	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
 
-	auto rarray = GetRandomArray("radix array", 1, numeric_limits<UINT>::max(), 5000);
-	init = rarray.IsSorted();
+	arr = GetRandomArray("tmp", 1, numeric_limits<UINT>::max(), 5000);
+	init = arr.IsSorted();
 	time = clock();
-	RadixSort(rarray);
+	RadixSort(arr);
 	time = clock() - time;
-	sorted = rarray.IsSorted();
+	sorted = arr.IsSorted();
 	cout << "Array of 5000, radix\n";
 	cout << "Initially sorted " << init << endl;
 	cout << "Sorted " << sorted << endl;
 	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
 
-	auto rlist = GetRandomList("radix list", 1, numeric_limits<UINT>::max(), 5000);
-	init = rlist.IsSorted();
+	lst = GetRandomList("tmp", 1, numeric_limits<UINT>::max(), 5000);
+	init = lst.IsSorted();
 	time = clock();
-	RadixSort(rlist);
+	RadixSort(lst);
 	time = clock() - time;
-	sorted = rlist.IsSorted();
-	cout << "Array of 5000, radix\n";
+	sorted = lst.IsSorted();
+	cout << "List of 5000, radix\n";
+	cout << "Initially sorted " << init << endl;
+	cout << "Sorted " << sorted << endl;
+	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
+
+	arr = GetRandomArray("tmp", 1, numeric_limits<UINT>::max(), 5000);
+	init = arr.IsSorted();
+	time = clock();
+	arr = MergeSort(arr);
+	time = clock() - time;
+	sorted = arr.IsSorted();
+	cout << "Array of 5000, merge\n";
+	cout << "Initially sorted " << init << endl;
+	cout << "Sorted " << sorted << endl;
+	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
+
+	lst = GetRandomList("tmp", 1, numeric_limits<UINT>::max(), 5000);
+	init = lst.IsSorted();
+	time = clock();
+	lst = MergeSort(lst);
+	time = clock() - time;
+	sorted = lst.IsSorted();
+	cout << "List of 5000, merge\n";
 	cout << "Initially sorted " << init << endl;
 	cout << "Sorted " << sorted << endl;
 	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
