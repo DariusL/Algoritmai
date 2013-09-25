@@ -12,6 +12,7 @@ public:
 	UINT GetCount();
 	bool IsSorted();
 	void Print();
+	void Swap(UINT a, UINT b);
 
 	ArrayAcessor<S> operator[](UINT pos);
 };
@@ -66,4 +67,13 @@ void DataArray<S>::Print()
 		cout << Read(i) << endl;
 	}
 	cout << endl;
+}
+
+template <class S>
+void DataArray<S>::Swap(UINT a, UINT b)
+{
+	UINT count = SegmentCount();
+	S temp = Read(a);
+	Write(Read(b), a);
+	Write(temp, b);
 }

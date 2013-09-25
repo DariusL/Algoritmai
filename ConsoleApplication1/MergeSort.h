@@ -3,26 +3,26 @@
 #include "DataList.h"
 
 template <class S>
-DataList<S> Merge(DataList<S> &data);
+DataList<S> MergeSort(DataList<S> &data);
 
 template <class S>
-DataList<S> Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right);
+DataList<S> MergeSort(DataList<S> &data, Iterator<S> left, Iterator<S> right);
 
 template <class S>
-DataArray<S> Merge(DataArray<S> &data);
+DataArray<S> MergeSort(DataArray<S> &data);
 
 template <class S>
-DataArray<S> Merge(DataArray<S> &data, UINT left, UINT right);
+DataArray<S> MergeSort(DataArray<S> &data, UINT left, UINT right);
 
 
 template <class S>
-DataList<S> Merge(DataList<S> &data)
+DataList<S> MergeSort(DataList<S> &data)
 {
-	return Merge(data, data.Begin().GetNext(), data.End().GetPrev());
+	return MergeSort(data, data.Begin().GetNext(), data.End().GetPrev());
 }
 
 template <class S>
-DataList<S> Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right)
+DataList<S> MergeSort(DataList<S> &data, Iterator<S> left, Iterator<S> right)
 {
 	DataList<S> ret(left.GetSomeString() + " " + right.GetSomeString());
 	Iterator<S> begin = ret.Begin();
@@ -34,8 +34,8 @@ DataList<S> Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right)
 	else
 	{
 		Iterator<S> middle = Iterator<S>::GetMiddleIterator(left, right);
-		DataList<S> oneList = Merge(data, left, middle.GetPrev());
-		DataList<S> twoList = Merge(data, middle, right);
+		DataList<S> oneList = MergeSort(data, left, middle.GetPrev());
+		DataList<S> twoList = MergeSort(data, middle, right);
 		Iterator<S> oneIt = oneList.Begin().GetNext();
 		Iterator<S> twoIt = twoList.Begin().GetNext();
 		S one;
@@ -73,13 +73,13 @@ DataList<S> Merge(DataList<S> &data, Iterator<S> left, Iterator<S> right)
 }
 
 template <class S>
-DataArray<S> Merge(DataArray<S> &data)
+DataArray<S> MergeSort(DataArray<S> &data)
 {
-	return Merge<S>(data, 0, data.GetCount() - 1);
+	return MergeSort<S>(data, 0, data.GetCount() - 1);
 }
 
 template <class S>
-DataArray<S> Merge(DataArray<S> &data, UINT left, UINT right)
+DataArray<S> MergeSort(DataArray<S> &data, UINT left, UINT right)
 {
 	DataArray<S> ret(to_string(left) + " " + to_string(right), right - left + 1);
 	if(left == right)
@@ -90,8 +90,8 @@ DataArray<S> Merge(DataArray<S> &data, UINT left, UINT right)
 	{
 		UINT middle1 = (left + right) / 2;
 		UINT middle2 = middle1 + 1;
-		DataArray<S> oneArr = Merge(data, left, middle1);
-		DataArray<S> twoArr = Merge(data, middle2, right);
+		DataArray<S> oneArr = MergeSort(data, left, middle1);
+		DataArray<S> twoArr = MergeSort(data, middle2, right);
 		UINT oneIt = 0;
 		UINT twoIt = 0;
 		UINT oneCount = oneArr.GetCount();

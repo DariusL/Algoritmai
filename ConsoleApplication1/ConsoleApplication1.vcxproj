@@ -81,12 +81,14 @@
     <ClInclude Include="ArrayAccessor.h" />
     <ClInclude Include="Data.h" />
     <ClInclude Include="DataArray.h" />
+    <ClInclude Include="DataHeap.h" />
     <ClInclude Include="DataList.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="HeapSort.h" />
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="ListEntry.h" />
     <ClInclude Include="ListHeader.h" />
-    <ClInclude Include="Merge.h" />
+    <ClInclude Include="MergeSort.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
