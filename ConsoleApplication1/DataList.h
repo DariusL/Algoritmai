@@ -30,23 +30,13 @@ private:
 	bool Valid(UINT pos);
 	bool Empty(UINT pos);
 	UINT New();
+	void Create();
 };
 
 template <class S>
 DataList<S>::DataList(string file) : Data(file)
 {
-	ListHeader header;
-	header.first = 1;
-	header.last = 2;
-	WriteHeader(header);
-	ListEntry<S> entry;
-	entry.prev = 0;
-	entry.next = 2;
-	Write(entry, 1);
-	entry.prev = 1;
-	entry.next = 0;
-	Write(entry, 2);
-	firstMaybeEmpty = SegmentCount();
+	Create();
 }
 
 template <class S>
@@ -243,25 +233,23 @@ bool DataList<S>::IsSorted()
 template <class S>
 void DataList<S>::Clear()
 {
-	ListHeader header = ReadHeader();
-	UINT current;
-	UINT next;
+	BaseClear();
+	Create();
+}
+
+template <class S>
+void DataList<S>::Create()
+{
+	ListHeader header;
+	header.first = 1;
+	header.last = 2;
+	WriteHeader(header);
 	ListEntry<S> entry;
-	entry = Read(header.first);
-	current = entry.next;
-	while(current != header.last)
-	{
-		entry = Read(current);
-		next = entry.next;
-		entry.next = 0;
-		entry.prev = 0;
-		Write(entry, current);
-		current = next;
-	}
-	entry = Read(header.first);
-	entry.next = header.last;
-	Write(entry, header.first);
-	entry = Read(header.last);
-	entry.prev = header.first;
-	Write(entry, header.last);
+	entry.prev = 0;
+	entry.next = 2;
+	Write(entry, 1);
+	entry.prev = 1;
+	entry.next = 0;
+	Write(entry, 2);
+	firstMaybeEmpty = SegmentCount();
 }

@@ -31,6 +31,8 @@ protected:
 	void Write(const S &what, UINT pos);
 	H ReadHeader();
 	void WriteHeader(const H &header);
+
+	void BaseClear();
 };
 
 template <class H, class S>
@@ -148,4 +150,11 @@ void Data<H, S>::Delete()
 {
 	data.close();
 	remove(file.c_str());
+}
+
+template <class H, class S>
+void Data<H, S>::BaseClear()
+{
+	data.close();
+	data.open(file.c_str(), OPEN_FLAGS);
 }

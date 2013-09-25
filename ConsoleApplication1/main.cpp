@@ -18,7 +18,7 @@ int main()
 	auto array = GetRandomArray("heap array", 1, numeric_limits<UINT>::max(), 5000);
 	bool init = array.IsSorted();
 	UINT time = clock();
-	//HeapSort<UINT>(array);
+	HeapSort<UINT>(array);
 	time = clock() - time;
 	bool sorted = array.IsSorted();
 	cout << "Array of 5000, heap\n";
@@ -29,7 +29,7 @@ int main()
 	auto list = GetRandomList("heap list", 1, numeric_limits<UINT>::max(), 5000);
 	init = list.IsSorted();
 	time = clock();
-	//HeapSort(list);
+	HeapSort(list);
 	time = clock() - time;
 	sorted = list.IsSorted();
 	cout << "List of 5000, heap\n";
@@ -43,6 +43,17 @@ int main()
 	RadixSort(rarray);
 	time = clock() - time;
 	sorted = rarray.IsSorted();
+	cout << "Array of 5000, radix\n";
+	cout << "Initially sorted " << init << endl;
+	cout << "Sorted " << sorted << endl;
+	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
+
+	auto rlist = GetRandomList("radix list", 1, numeric_limits<UINT>::max(), 5000);
+	init = rlist.IsSorted();
+	time = clock();
+	RadixSort(rlist);
+	time = clock() - time;
+	sorted = rlist.IsSorted();
 	cout << "Array of 5000, radix\n";
 	cout << "Initially sorted " << init << endl;
 	cout << "Sorted " << sorted << endl;

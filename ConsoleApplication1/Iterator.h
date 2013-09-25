@@ -13,6 +13,7 @@ class Iterator
 	DataList<S> *data;
 	UINT entry;
 public:
+	Iterator() : data(0), entry(0){}
 	Iterator(DataList<S> *data, UINT entry);
 	~Iterator(){}
 
