@@ -8,9 +8,12 @@ void RadixSort(DataArray<S> &data, UINT speed = 2);
 template <class S>
 void RadixSort(DataList<S> &data, UINT speed = 2);
 
+UINT Clamp(UINT min, UINT max, UINT value);
+
 template <class S>
 void RadixSort(DataArray<S> &data, UINT speed)
 {
+	Clamp(0, 3, speed);
 	UINT count = data.GetCount();
 	vector<DataArray<S>> buckets;
 	UINT bits = pow(2, speed);
@@ -54,6 +57,7 @@ void RadixSort(DataArray<S> &data, UINT speed)
 template <class S>
 void RadixSort(DataList<S> &data, UINT speed)
 {
+	Clamp(0, 3, speed);
 	vector<DataList<S>> buckets;
 	UINT bits = pow(2, speed);
 	UINT bucketCount = pow(2, bits);
@@ -92,4 +96,14 @@ void RadixSort(DataList<S> &data, UINT speed)
 				l.Clear();
 		}
 	}
+}
+
+UINT Clamp(UINT min, UINT max, UINT value)
+{
+	if(value < min)
+		return min;
+	else if(value > max)
+		return max;
+	else
+		return value;
 }
