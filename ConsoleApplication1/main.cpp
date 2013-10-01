@@ -15,10 +15,11 @@ DataList<UINT> GetRandomList(string name, UINT from, UINT to, UINT count);
 
 int main()
 {
-	auto arr = GetRandomArray("tmp", 1, numeric_limits<UINT>::max(), 5000);
+	UINT count = 5000;
+	auto arr = GetRandomArray("tmp", 1, numeric_limits<UINT>::max(), count);
 	bool init = arr.IsSorted();
 	UINT time = clock();
-	HeapSort<UINT>(arr);
+	//HeapSort<UINT>(arr);
 	time = clock() - time;
 	bool sorted = arr.IsSorted();
 	cout << "Array of 5000, heap\n";
@@ -26,10 +27,10 @@ int main()
 	cout << "Sorted " << sorted << endl;
 	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
 
-	auto lst = GetRandomList("tmp", 1, numeric_limits<UINT>::max(), 5000);
+	auto lst = GetRandomList("tmp", 1, numeric_limits<UINT>::max(), count);
 	init = lst.IsSorted();
 	time = clock();
-	HeapSort(lst);
+	//HeapSort(lst);
 	time = clock() - time;
 	sorted = lst.IsSorted();
 	cout << "List of 5000, heap\n";
@@ -37,10 +38,10 @@ int main()
 	cout << "Sorted " << sorted << endl;
 	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
 
-	arr = GetRandomArray("tmp", 1, numeric_limits<UINT>::max(), 5000);
+	arr = GetRandomArray("tmp", 1, numeric_limits<UINT>::max(), count);
 	init = arr.IsSorted();
 	time = clock();
-	RadixSort(arr);
+	//RadixSort(arr);
 	time = clock() - time;
 	sorted = arr.IsSorted();
 	cout << "Array of 5000, radix\n";
@@ -48,7 +49,7 @@ int main()
 	cout << "Sorted " << sorted << endl;
 	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
 
-	lst = GetRandomList("tmp", 1, numeric_limits<UINT>::max(), 5000);
+	lst = GetRandomList("tmp", 1, numeric_limits<UINT>::max(), count);
 	init = lst.IsSorted();
 	time = clock();
 	RadixSort(lst);
@@ -59,10 +60,10 @@ int main()
 	cout << "Sorted " << sorted << endl;
 	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
 
-	arr = GetRandomArray("tmp", 1, numeric_limits<UINT>::max(), 5000);
+	arr = GetRandomArray("tmp", 1, numeric_limits<UINT>::max(), count);
 	init = arr.IsSorted();
 	time = clock();
-	arr = MergeSort(arr);
+	//arr = MergeSort(arr);
 	time = clock() - time;
 	sorted = arr.IsSorted();
 	cout << "Array of 5000, merge\n";
@@ -70,10 +71,10 @@ int main()
 	cout << "Sorted " << sorted << endl;
 	cout << "Sort time " << time / (double)CLOCKS_PER_SEC << " seconds\n\n";
 
-	lst = GetRandomList("tmp", 1, numeric_limits<UINT>::max(), 5000);
+	lst = GetRandomList("tmp", 1, numeric_limits<UINT>::max(), count);
 	init = lst.IsSorted();
 	time = clock();
-	lst = MergeSort(lst);
+	//lst = MergeSort(lst);
 	time = clock() - time;
 	sorted = lst.IsSorted();
 	cout << "List of 5000, merge\n";

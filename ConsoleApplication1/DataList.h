@@ -20,6 +20,7 @@ public:
 	bool Valid(const Iterator<S> &it);
 	bool InsertAfter(const Iterator<S> &it, const S &data);
 	bool InsertBefore(const Iterator<S> &it, const S &data);
+	void PushBack(S &item);
 	void Swap(const Iterator<S> &left, const Iterator<S> right);
 	void Print();
 	bool IsBegin(const Iterator<S> &it);
@@ -169,6 +170,30 @@ bool DataList<S>::InsertBefore(const Iterator<S> &it, const S &data)
 		Write(next, nextInd);
 		return true;
 	}
+}
+
+template <class S>
+void DataList<S>::PushBack(S &item)
+{
+	ListEntry<S> entry, prev, next;
+	UINT entryInd, prevInd, nextInd;
+
+	nextInd = ReadHeader().last;
+	next = Read(nextInd);
+	prevInd = next.prev;
+	prev = Read(prevInd);
+	entryInd = New();
+
+	entry.data = item;
+	entry.prev = prevInd;
+	entry.next = nextInd;
+
+	prev.next = entryInd;
+	next.prev = entryInd;
+
+	Write(entry, entryInd);
+	Write(prev, prevInd);
+	Write(next, nextInd);
 }
 
 template <class S>
