@@ -19,7 +19,7 @@ int main()
 	auto arr = GetRandomArray("tmp", 1, numeric_limits<UINT>::max(), count);
 	bool init = arr.IsSorted();
 	UINT time = clock();
-	//HeapSort<UINT>(arr);
+	HeapSort<UINT>(arr);
 	time = clock() - time;
 	bool sorted = arr.IsSorted();
 	cout << "Array of 5000, heap\n";
@@ -30,7 +30,7 @@ int main()
 	auto lst = GetRandomList("tmp", 1, numeric_limits<UINT>::max(), count);
 	init = lst.IsSorted();
 	time = clock();
-	//HeapSort(lst);
+	HeapSort(lst);
 	time = clock() - time;
 	sorted = lst.IsSorted();
 	cout << "List of 5000, heap\n";
@@ -41,7 +41,7 @@ int main()
 	arr = GetRandomArray("tmp", 1, numeric_limits<UINT>::max(), count);
 	init = arr.IsSorted();
 	time = clock();
-	//RadixSort(arr);
+	RadixSort(arr);
 	time = clock() - time;
 	sorted = arr.IsSorted();
 	cout << "Array of 5000, radix\n";
@@ -63,7 +63,7 @@ int main()
 	arr = GetRandomArray("tmp", 1, numeric_limits<UINT>::max(), count);
 	init = arr.IsSorted();
 	time = clock();
-	//arr = MergeSort(arr);
+	arr = MergeSort(arr);
 	time = clock() - time;
 	sorted = arr.IsSorted();
 	cout << "Array of 5000, merge\n";
@@ -74,7 +74,7 @@ int main()
 	lst = GetRandomList("tmp", 1, numeric_limits<UINT>::max(), count);
 	init = lst.IsSorted();
 	time = clock();
-	//lst = MergeSort(lst);
+	lst = MergeSort(lst);
 	time = clock() - time;
 	sorted = lst.IsSorted();
 	cout << "List of 5000, merge\n";
