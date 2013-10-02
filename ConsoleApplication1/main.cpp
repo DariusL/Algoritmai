@@ -17,52 +17,38 @@ int main()
 {
 	UINT time;
 	UINT count;
-	count = 100;
-	DataArray<UINT> arr = GetRandomArray("safas", 0, numeric_limits<UINT>::max(), count);
+	count = 10;
+	auto arr = GetRandomList("safas", 0, numeric_limits<UINT>::max(), count);
 	time = clock();
-	MergeSort(arr);
+	RadixSort(arr);
+	time = clock() - time;
+	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
+
+	count = 100;
+	arr = GetRandomList("safas", 0, numeric_limits<UINT>::max(), count);
+	time = clock();
+	RadixSort(arr);
 	time = clock() - time;
 	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
 
 	count = 1000;
-	arr = GetRandomArray("safas", 0, numeric_limits<UINT>::max(), count);
+	arr = GetRandomList("safas", 0, numeric_limits<UINT>::max(), count);
 	time = clock();
-	MergeSort(arr);
+	RadixSort(arr);
 	time = clock() - time;
 	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
 
 	count = 10000;
-	arr = GetRandomArray("safas", 0, numeric_limits<UINT>::max(), count);
+	arr = GetRandomList("safas", 0, numeric_limits<UINT>::max(), count);
 	time = clock();
-	MergeSort(arr);
+	RadixSort(arr);
 	time = clock() - time;
 	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
 
 	count = 100000;
-	arr = GetRandomArray("safas", 0, numeric_limits<UINT>::max(), count);
+	arr = GetRandomList("safas", 0, numeric_limits<UINT>::max(), count);
 	time = clock();
-	MergeSort(arr);
-	time = clock() - time;
-	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
-
-	count = 10;
-	arr = GetRandomArray("safas", 0, numeric_limits<UINT>::max(), count);
-	time = clock();
-	MergeSort(arr);
-	time = clock() - time;
-	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
-
-	count = 1000000;
-	arr = GetRandomArray("safas", 0, numeric_limits<UINT>::max(), count);
-	time = clock();
-	MergeSort(arr);
-	time = clock() - time;
-	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
-
-	count = 10000000;
-	arr = GetRandomArray("safas", 0, numeric_limits<UINT>::max(), count);
-	time = clock();
-	MergeSort(arr);
+	RadixSort(arr);
 	time = clock() - time;
 	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
 
