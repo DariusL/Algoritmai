@@ -2,6 +2,7 @@
 #include "DataList.h"
 #include <numeric>
 #include <iostream>
+#include <fstream>
 #include <random>
 #include <functional>
 #include <ctime>
@@ -16,42 +17,21 @@ DataList<UINT> GetRandomList(string name, UINT from, UINT to, UINT count);
 int main()
 {
 	UINT time;
-	UINT count;
-	count = 10;
-	auto arr = GetRandomList("safas", 0, numeric_limits<UINT>::max(), count);
-	time = clock();
-	RadixSort(arr);
-	time = clock() - time;
-	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
-
-	count = 100;
-	arr = GetRandomList("safas", 0, numeric_limits<UINT>::max(), count);
-	time = clock();
-	RadixSort(arr);
-	time = clock() - time;
-	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
-
-	count = 1000;
-	arr = GetRandomList("safas", 0, numeric_limits<UINT>::max(), count);
-	time = clock();
-	RadixSort(arr);
-	time = clock() - time;
-	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
-
-	count = 10000;
-	arr = GetRandomList("safas", 0, numeric_limits<UINT>::max(), count);
-	time = clock();
-	RadixSort(arr);
-	time = clock() - time;
-	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
-
-	count = 100000;
-	arr = GetRandomList("safas", 0, numeric_limits<UINT>::max(), count);
-	time = clock();
-	RadixSort(arr);
-	time = clock() - time;
-	cout << count << " " << time / (double)CLOCKS_PER_SEC << endl;
-
+	UINT counts[] = {10, 50, 100, 500, 1000, 5000, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000};
+	bool sorted;
+	ofstream out("rez.csv", ios::trunc);
+	for(UINT count : counts)
+	{
+		ops = 0;
+		auto stuff = GetRandomList("gfasgasg", 0, numeric_limits<UINT>::max(), count);
+		time = clock();
+		MergeSort(stuff);
+		time = clock() - time;
+		sorted = stuff.IsSorted();
+		cout << "sorted " << sorted << " count " << count << " time " << time << " ops " << ops << endl;
+		out << count << ';' << time << ';' << ops << ";\n";
+	}
+	out.close();
 	system("pause");
 	return 0;
 }

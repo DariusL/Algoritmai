@@ -35,10 +35,10 @@ public:
 	bool IsPrev(const Iterator<S> &other) const;
 
 	bool operator==(const Iterator<S> &other) const;
-	bool operator!=(const Iterator<S> &other) const {return !(*this == other);}
+	bool operator!=(const Iterator<S> &other) const {return !(*this == other);ops += 2;}
 
 	static Iterator<S> GetMiddleIterator(const Iterator<S> &left, const Iterator<S> &right);
-	string GetSomeString() const {return to_string(entry);}
+	string GetSomeString() const {return to_string(entry);ops += 1;}
 private:
 	ListEntry<S> GetEntry() const;
 };
@@ -46,6 +46,7 @@ private:
 template <class S>
 Iterator<S>::Iterator(DataList<S> *data, UINT entry)
 {
+	ops += 2;
 	this->data = data;
 	this->entry = entry;
 }
@@ -53,14 +54,17 @@ Iterator<S>::Iterator(DataList<S> *data, UINT entry)
 template <class S>
 S Iterator<S>::Get() const
 {
+	ops += 2;
 	return GetEntry().data;
 }
 
 template <class S>
 void Iterator<S>::Put(S what) const
 {
+	ops += 1;
 	if(!data->Valid(entry))
 		return;
+	ops += 4;
 	ListEntry<S> e = GetEntry();
 	e.data = what;
 	data->Write(e, pos);
@@ -69,9 +73,11 @@ void Iterator<S>::Put(S what) const
 template <class S>
 bool Iterator<S>::Prev()
 {
+	ops += 2;
 	ListEntry<S> e = GetEntry();
 	if(data->Valid(e.prev))
 	{
+		ops += 1;
 		entry = e.prev;
 		return true;
 	}
@@ -81,9 +87,11 @@ bool Iterator<S>::Prev()
 template <class S>
 bool Iterator<S>::Next()
 {
+	ops += 2;
 	ListEntry<S> e = GetEntry();
 	if(data->Valid(e.next))
 	{
+		ops += 1;
 		entry = e.next;
 		return true;
 	}
@@ -93,6 +101,7 @@ bool Iterator<S>::Next()
 template <class S>
 bool Iterator<S>::HasPrev() const
 {
+	ops += 4;
 	UINT prev = GetEntry().prev;
 	return data->Valid(prev);
 }
@@ -100,6 +109,7 @@ bool Iterator<S>::HasPrev() const
 template <class S>
 bool Iterator<S>::HasNext() const
 {
+	ops += 4;
 	UINT next = GetEntry().next;
 	return data->Valid(next);
 }
@@ -107,8 +117,10 @@ bool Iterator<S>::HasNext() const
 template <class S>
 void Iterator<S>::Remove()
 {
+	ops += 2;
 	if(HasNext())
 	{
+		ops += 2;
 		ListEntry<S> e = GetEntry();
 		entry = e.next;
 	}
@@ -118,6 +130,7 @@ void Iterator<S>::Remove()
 template <class S>
 bool Iterator<S>::operator==(const Iterator<S> &other) const
 {
+	ops += 3;
 	return data == other.data && entry == other.entry;
 }
 
@@ -126,8 +139,10 @@ Iterator<S> Iterator<S>::GetMiddleIterator(const Iterator<S> &left, const Iterat
 {
 	Iterator<S> it1 = left;
 	Iterator<S> it2 = left;
+	ops += 3;
 	while(it2 != right)
 	{
+		ops += 5;
 		it1.Next();
 		it2.Next();
 		if(it2 == right)
@@ -140,6 +155,7 @@ Iterator<S> Iterator<S>::GetMiddleIterator(const Iterator<S> &left, const Iterat
 template <class S>
 Iterator<S> Iterator<S>::GetNext() const
 {
+	ops += 2;
 	ListEntry<S> e = GetEntry();
 	return Iterator<S>(data, e.next);
 }
@@ -147,6 +163,7 @@ Iterator<S> Iterator<S>::GetNext() const
 template <class S>
 Iterator<S> Iterator<S>::GetPrev() const
 {
+	ops += 2;
 	ListEntry<S> e = GetEntry();
 	return Iterator<S>(data, e.prev);
 }
@@ -154,17 +171,20 @@ Iterator<S> Iterator<S>::GetPrev() const
 template <class S>
 bool Iterator<S>::IsNext(const Iterator<S> &other) const
 {
+	ops += 2;
 	return GetNext() == other;
 }
 
 template <class S>
 bool Iterator<S>::IsPrev(const Iterator<S> &other) const
 {
+	ops += 2;
 	return GetPrev() == other;
 }
 
 template <class S>
 ListEntry<S> Iterator<S>::GetEntry() const
 {
+	ops += 2;
 	return data->Read(entry);
 }

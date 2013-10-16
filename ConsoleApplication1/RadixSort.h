@@ -13,26 +13,29 @@ UINT Clamp(UINT min, UINT max, UINT value);
 template <class S>
 void RadixSort(DataArray<S> &data, UINT speed)
 {
-	Clamp(0, 3, speed);
+	speed = Clamp(0, 3, speed);
 	UINT count = data.GetCount();
 	vector<DataArray<S>> buckets;
 	UINT bits = pow(2, speed);
 	UINT bucketCount = pow(2, bits);
-
+	ops += 5 + bucketCount * 2;
 	for(UINT i = 0; i < bucketCount; i++)
 		buckets.emplace_back(to_string(i), 0);
 
 	UINT byteCount = sizeof(S);
 	UINT bitMask, masked = 0, ind, bCount, bInd;
 	S item;
-
+	ops += 7;
 	for(UINT i = 0; i < byteCount; i++)
 	{
+		ops += 1;
 		for(UINT j = 0; j < 8; j += bits)
 		{
+			ops += 3;
 			bitMask = (bucketCount - 1) << j;
 			for(UINT k = 0; k < count; k++)
 			{
+				ops += 5;
 				item = data[k];
 				memcpy(&masked, ((char*)&item) + i, 1);
 				masked = masked & bitMask;
@@ -42,12 +45,14 @@ void RadixSort(DataArray<S> &data, UINT speed)
 			ind = 0;
 			for(UINT b = 0; b < bucketCount; b++)
 			{
+				
 				DataArray<S> &bucket = buckets[b];
 				bCount = bucket.GetCount();
-
+				ops += 4 + bCount * 3;
 				for(UINT l = 0; l < bCount; l++, ind++)
 					data[ind] = bucket[l];
 			}
+			ops += bucketCount;
 			for(UINT b = 0; b < bucketCount; b++)
 				buckets[b].Clear();
 		}
@@ -57,10 +62,11 @@ void RadixSort(DataArray<S> &data, UINT speed)
 template <class S>
 void RadixSort(DataList<S> &data, UINT speed)
 {
-	Clamp(0, 3, speed);
+	speed = Clamp(0, 3, speed);
 	vector<DataList<S>> buckets;
 	UINT bits = pow(2, speed);
 	UINT bucketCount = pow(2, bits);
+	ops += 4 + bucketCount * 2;
 
 	for(UINT i = 0; i < bucketCount; i++)
 		buckets.emplace_back(to_string(i));
@@ -69,15 +75,19 @@ void RadixSort(DataList<S> &data, UINT speed)
 	UINT bitMask, masked = 0, ind = 0;
 	S item;
 	Iterator<S> mit, it;
+	ops += 7;
 
 	for(UINT i = 0; i < byteCount; i++)
 	{
+		ops += 1;
 		for(UINT j = 0; j < 8; j += bits)
 		{
+			ops += 5;
 			bitMask = (bucketCount - 1) << j;
 			mit = data.Begin();
 			for(mit.Next(); !data.IsEnd(mit); mit.Next())
 			{
+				ops += 7;
 				item = mit.Get();
 				memcpy(&masked, ((char*)&item) + i, 1);
 				masked = masked & bitMask;
@@ -87,11 +97,16 @@ void RadixSort(DataList<S> &data, UINT speed)
 			data.Clear();
 			for(UINT k = 0; k < bucketCount; k++)
 			{
+				ops += 4;
 				DataList<S> &d = buckets[k];
 				it = d.Begin();
 				for(it.Next(); !d.IsEnd(it); it.Next())
+				{
+					ops += 2;
 					data.PushBack(item);
+				}
 			}
+			ops += bucketCount;
 			for(DataList<S> &l : buckets)
 				l.Clear();
 		}
@@ -100,6 +115,7 @@ void RadixSort(DataList<S> &data, UINT speed)
 
 UINT Clamp(UINT min, UINT max, UINT value)
 {
+	ops += 3;
 	if(value < min)
 		return min;
 	else if(value > max)

@@ -41,7 +41,9 @@ Data<H, S>::Data(string file) : data(file, OPEN_FLAGS)
 	hSize = sizeof(H);
 	sSize = sizeof(S);
 	this->file = file;
+	ops += 4;
 }
+
 
 template <class H, class S>
 Data<H, S>::~Data()
@@ -50,7 +52,9 @@ Data<H, S>::~Data()
 	{
 		data.close();
 		Delete();
+		ops += 2;
 	}
+	ops += 2;
 }
 
 template <class H, class S>
@@ -61,6 +65,7 @@ Data<H, S>::Data(Data<H, S> &&other)
 	hSize = other.hSize;
 	sSize = other.sSize;
 	other.file = "";
+	ops += 5;
 }
 
 template <class H, class S>
@@ -74,10 +79,12 @@ Data<H, S>::Data(Data<H, S> &other)
 	S segment;
 	data.write((char*)&header, hSize);
 	UINT count = other.SegmentCount();
+	ops += 7;
 	for(UINT i = 0; i < count; i++)
 	{
 		segment = other.Read(i);
 		data.write((char*)&segment, sSize);
+		ops += 1;
 	}
 }
 
@@ -93,10 +100,12 @@ Data<H, S> &Data<H, S>::operator=(Data<H, S> &other)
 		WriteHeader(other.ReadHeader());
 		S segment;
 		UINT count = other.SegmentCount();
+		ops += 7;
 		for(UINT i = 0; i < count; i++)
 		{
 			segment = other.Read(i);
 			data.write((char*)&segment, sSize);
+			ops += 2;
 		}
 	}
 	return *this;
@@ -110,13 +119,16 @@ S Data<H, S>::Read(UINT pos)
 	{
 		data.seekg(hSize + pos * sSize);
 		data.read((char*)&ret, sSize);
+		ops += 2;
 	}
+	ops += 2;
 	return ret;
 }
 
 template <class H, class S>
 void Data<H, S>::Write(const S &what, UINT pos)
 {
+	ops += 2;
 	data.seekg(hSize + pos * sSize);
 	data.write((char*)&what, sSize);
 }
@@ -124,6 +136,7 @@ void Data<H, S>::Write(const S &what, UINT pos)
 template <class H, class S>
 H Data<H, S>::ReadHeader()
 {
+	ops += 4;
 	H ret;
 	data.seekg(0);
 	data.read((char*)&ret, hSize);
@@ -133,6 +146,7 @@ H Data<H, S>::ReadHeader()
 template <class H, class S>
 void Data<H, S>::WriteHeader(const H &header)
 {
+	ops += 2;
 	data.seekg(0);
 	data.write((char*)&header, hSize);
 }
@@ -140,6 +154,7 @@ void Data<H, S>::WriteHeader(const H &header)
 template <class H, class S>
 UINT Data<H, S>::SegmentCount()
 {
+	ops += 3;
 	data.seekg(0, ios::end);
 	UINT size = data.tellg();
 	return (size - hSize) / sSize;
@@ -148,6 +163,7 @@ UINT Data<H, S>::SegmentCount()
 template <class H, class S>
 void Data<H, S>::Delete()
 {
+	ops += 2;
 	data.close();
 	remove(file.c_str());
 }
@@ -155,6 +171,7 @@ void Data<H, S>::Delete()
 template <class H, class S>
 void Data<H, S>::BaseClear()
 {
+	ops += 2;
 	data.close();
 	data.open(file.c_str(), OPEN_FLAGS);
 }
