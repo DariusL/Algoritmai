@@ -23,9 +23,9 @@ int main()
 	for(UINT count : counts)
 	{
 		ops = 0;
-		auto stuff = GetRandomList("gfasgasg", 0, numeric_limits<UINT>::max(), count);
+		auto stuff = GetRandomArray("gfasgasg", 0, numeric_limits<UINT>::max(), count);
 		time = clock();
-		MergeSort(stuff);
+		HeapSort(stuff);
 		time = clock() - time;
 		sorted = stuff.IsSorted();
 		cout << "sorted " << sorted << " count " << count << " time " << time << " ops " << ops << endl;

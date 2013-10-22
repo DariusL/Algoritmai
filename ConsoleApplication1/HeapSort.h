@@ -48,28 +48,22 @@ template <class S>
 void SiftDown(DataArray<S> &data, UINT start, UINT end)
 {
 	UINT root = start;
-	UINT child, swap;
-	ops += 4;
-	while(root * 2 + 1 <= end)
-	{
-		ops += 13;
-		child = root * 2 + 1;
-		swap = root;
+	UINT child = root * 2 + 1;
+	UINT swap = root;
+
+	ops += 12;
+	if(child <= end)
 		if(data[swap] < data[child])
 			swap = child;
-		if(child + 1 <= end)
-			if(data[swap] < data[child + 1])
-				swap = child + 1;
-		if(swap != root)
-		{
-			ops += 2;
-			data.Swap(swap, root);
-			root = swap;
-		}
-		else
-		{
-			break;
-		}
+	child++;
+	if(child <= end)
+		if(data[swap] < data[child])
+			swap = child;
+	if(swap != root)
+	{
+		ops += 2;
+		data.Swap(swap, root);
+		SiftDown(data, swap, end);
 	}
 }
 
