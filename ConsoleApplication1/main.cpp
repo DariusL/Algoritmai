@@ -25,7 +25,7 @@ int main()
 		ops = 0;
 		auto stuff = GetRandomArray("gfasgasg", 0, numeric_limits<UINT>::max(), count);
 		time = clock();
-		HeapSort(stuff);
+		RadixSort(stuff);
 		time = clock() - time;
 		sorted = stuff.IsSorted();
 		cout << "sorted " << sorted << " count " << count << " time " << time << " ops " << ops << endl;

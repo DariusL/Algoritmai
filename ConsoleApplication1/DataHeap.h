@@ -68,7 +68,7 @@ void DataHeap<S>::Add(S item, UINT pos)
 		}
 		ops += 4;
 	}
-	ops += 1
+	ops += 1;
 }
 
 template <class S>
