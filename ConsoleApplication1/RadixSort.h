@@ -21,41 +21,39 @@ void RadixSort(DataArray<S> &data, UINT speed)
 	ops += 5 + bucketCount * 2;
 	for(UINT i = 0; i < bucketCount; i++)
 		buckets.emplace_back(to_string(i), 0);
-
-	UINT byteCount = sizeof(S);
-	UINT bitMask, masked = 0, ind, bCount, bInd;
+	UINT keysPerByte = 8 / bits;
+	UINT keyCount = keysPerByte * sizeof(S);
+	UINT bitMask, masked = 0, ind, bCount, bInd, inByte, inBit;
 	S item;
 	ops += 7;
-	for(UINT i = 0; i < byteCount; i++)
+	for (UINT i = 0; i < keyCount; i++)
 	{
-		ops += 1;
-		for(UINT j = 0; j < 8; j += bits)
+		inByte = i / keysPerByte;
+		inBit = (i % keysPerByte) * bits;
+		bitMask = (bucketCount - 1) << inBit;
+
+		for (UINT k = 0; k < count; k++)
 		{
-			ops += 3;
-			bitMask = (bucketCount - 1) << j;
-			for(UINT k = 0; k < count; k++)
-			{
-				ops += 5;
-				item = data[k];
-				memcpy(&masked, ((char*)&item) + i, 1);
-				masked = masked & bitMask;
-				bInd = masked >> j;
-				buckets[bInd].PushBack(item);
-			}
-			ind = 0;
-			for(UINT b = 0; b < bucketCount; b++)
-			{
-				
-				DataArray<S> &bucket = buckets[b];
-				bCount = bucket.GetCount();
-				ops += 4 + bCount * 3;
-				for(UINT l = 0; l < bCount; l++, ind++)
-					data[ind] = bucket[l];
-			}
-			ops += bucketCount;
-			for(UINT b = 0; b < bucketCount; b++)
-				buckets[b].Clear();
+			ops += 5;
+			item = data[k];
+			memcpy(&masked, ((char*)&item) + inByte, 1);
+			masked &= bitMask;
+			bInd = masked >> inBit;
+			buckets[bInd].PushBack(item);
 		}
+		ind = 0;
+		for (UINT b = 0; b < bucketCount; b++)
+		{
+
+			DataArray<S> &bucket = buckets[b];
+			bCount = bucket.GetCount();
+			ops += 4 + bCount * 3;
+			for (UINT l = 0; l < bCount; l++, ind++)
+				data[ind] = bucket[l];
+		}
+		ops += bucketCount;
+		for (UINT b = 0; b < bucketCount; b++)
+			buckets[b].Clear();
 	}
 }
 
@@ -67,49 +65,44 @@ void RadixSort(DataList<S> &data, UINT speed)
 	UINT bits = pow(2, speed);
 	UINT bucketCount = pow(2, bits);
 	ops += 4 + bucketCount * 2;
-
 	for(UINT i = 0; i < bucketCount; i++)
 		buckets.emplace_back(to_string(i));
-
-	UINT byteCount = sizeof(S);
-	UINT bitMask, masked = 0, ind = 0;
+	UINT keysPerByte = 8 / bits;
+	UINT keyCount = keysPerByte * sizeof(S);
+	UINT bitMask, masked = 0, ind = 0, inBit, inByte;
 	S item;
 	Iterator<S> mit, it;
 	ops += 7;
-
-	for(UINT i = 0; i < byteCount; i++)
+	for (UINT i = 0; i < keyCount; i++)
 	{
-		ops += 1;
-		for(UINT j = 0; j < 8; j += bits)
+		inByte = i / keysPerByte;
+		inBit = (i % keysPerByte) * bits;
+		bitMask = (bucketCount - 1) << inBit;
+		mit = data.Begin();
+		for(mit.Next(); !data.IsEnd(mit); mit.Next())
 		{
-			ops += 5;
-			bitMask = (bucketCount - 1) << j;
-			mit = data.Begin();
-			for(mit.Next(); !data.IsEnd(mit); mit.Next())
-			{
-				ops += 7;
-				item = mit.Get();
-				memcpy(&masked, ((char*)&item) + i, 1);
-				masked = masked & bitMask;
-				ind = masked >> j;
-				buckets[ind].PushBack(item);
-			}
-			data.Clear();
-			for(UINT k = 0; k < bucketCount; k++)
-			{
-				ops += 4;
-				DataList<S> &d = buckets[k];
-				it = d.Begin();
-				for(it.Next(); !d.IsEnd(it); it.Next())
-				{
-					ops += 2;
-					data.PushBack(item);
-				}
-			}
-			ops += bucketCount;
-			for(DataList<S> &l : buckets)
-				l.Clear();
+			ops += 7;
+			item = mit.Get();
+			memcpy(&masked, ((char*)&item) + inByte, 1);
+			masked = masked & bitMask;
+			ind = masked >> inBit;
+			buckets[ind].PushBack(item);
 		}
+		data.Clear();
+		for(UINT k = 0; k < bucketCount; k++)
+		{
+			ops += 4;
+			DataList<S> &d = buckets[k];
+			it = d.Begin();
+			for(it.Next(); !d.IsEnd(it); it.Next())
+			{
+				ops += 2;
+				data.PushBack(item);
+			}
+		}
+		ops += bucketCount;
+		for(DataList<S> &l : buckets)
+			l.Clear();
 	}
 }
 

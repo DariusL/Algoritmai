@@ -23,7 +23,7 @@ int main()
 	for(UINT count : counts)
 	{
 		ops = 0;
-		auto stuff = GetRandomArray("gfasgasg", 0, numeric_limits<UINT>::max(), count);
+		auto stuff = GetRandomList("gfasgasg", 0, numeric_limits<UINT>::max(), count);
 		time = clock();
 		RadixSort(stuff);
 		time = clock() - time;
